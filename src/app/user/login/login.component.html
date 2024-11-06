@@ -1,7 +1,7 @@
 <div class="parent"> 
     <div class="container" [ngClass]="isSignDivVisiable ? 'active' :'' " id="container">
         <div class="form-container sign-up" >
-            <form *ngIf="!isRegister && !loading">
+            <!-- <form *ngIf="!isRegister && !loading">
                 <h1>Create Account</h1>
                 <br>
 
@@ -12,8 +12,46 @@
                 <input type="password" name="password"  [(ngModel)]="user.password" placeholder="Password" required>
                 <input type="password" name="password"  [(ngModel)]="checkPassword" placeholder="Password again" required>
                 <button (click)="onRegister()">Sign Up</button>
+            </form> -->
+            <form *ngIf="!isRegister && !loading" [formGroup]="registerForm" (ngSubmit)="onRegister()">
+                <h1>Create Account</h1>
+                <br>
+            
+                <input type="text" formControlName="name" placeholder="Name" required>
+                <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+                  <small *ngIf="registerForm.get('name')?.errors?.['required']">Name is required.</small>
+                </div>
+            
+                <input type="text" formControlName="surname" placeholder="Surname" required>
+                <div *ngIf="registerForm.get('surname')?.invalid && registerForm.get('surname')?.touched">
+                  <small *ngIf="registerForm.get('surname')?.errors?.['required']">Surname is required.</small>
+                </div>
+            
+                <input type="email" formControlName="email" placeholder="Email" required>
+                <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+                  <small *ngIf="registerForm.get('email')?.errors?.['required']">Email is required.</small>
+                  <small *ngIf="registerForm.get('email')?.errors?.['email']">Enter a valid email.</small>
+                </div>
+            
+                <input type="text" formControlName="address" placeholder="Address" required>
+                <div *ngIf="registerForm.get('address')?.invalid && registerForm.get('address')?.touched">
+                  <small *ngIf="registerForm.get('address')?.errors?.['required']">Address is required.</small>
+                </div>
+            
+                <input type="password" formControlName="password" placeholder="Password" required>
+                <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+                  <small *ngIf="registerForm.get('password')?.errors?.['required']">Password is required.</small>
+                  <small *ngIf="registerForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters long.</small>
+                </div>
+            
+                <input type="password" formControlName="checkPassword" placeholder="Password again" required>
+                <div *ngIf="registerForm.get('checkPassword')?.invalid && registerForm.get('checkPassword')?.touched">
+                  <small *ngIf="registerForm.get('checkPassword')?.errors?.['required']">Please confirm your password.</small>
+                  
+                </div>
+                <small *ngIf="passwordMatchValidator()">Passwords do not match.</small> 
+                <button type="submit" [disabled]="registerForm.invalid">Sign Up</button>
             </form>
-
             <form *ngIf="isRegister && !loading">
                 <h1>Activate Account</h1>
                 
