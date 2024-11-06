@@ -1,21 +1,30 @@
 <div class="parent"> 
     <div class="container" [ngClass]="isSignDivVisiable ? 'active' :'' " id="container">
         <div class="form-container sign-up" >
-            <form>
+            <form *ngIf="!isRegister && !loading">
                 <h1>Create Account</h1>
-                
-                <span>or use your email for registeration</span>
+                <br>
 
-                <input type="text" name="name" [(ngModel)]="user.name" placeholder="Name">
-                <input type="text" name="surname" [(ngModel)]="user.surname" placeholder="Surname">
-                <input type="email" name="email" [(ngModel)]="user.email" placeholder="Email">
-                <input type="text" name="address"  placeholder="Address">
-                <input type="password" name="password"  [(ngModel)]="user.password" placeholder="Password">
-                <input type="password" name="password"  [(ngModel)]="checkPassword" placeholder="Password again">
+                <input type="text" name="name" [(ngModel)]="user.name" placeholder="Name" required>
+                <input type="text" name="surname" [(ngModel)]="user.surname" placeholder="Surname" required>
+                <input type="email" name="email" [(ngModel)]="user.email" placeholder="Email" required>
+                <input type="text" name="address"  placeholder="Address" required>
+                <input type="password" name="password"  [(ngModel)]="user.password" placeholder="Password" required>
+                <input type="password" name="password"  [(ngModel)]="checkPassword" placeholder="Password again" required>
                 <button (click)="onRegister()">Sign Up</button>
             </form>
+
+            <form *ngIf="isRegister && !loading">
+                <h1>Activate Account</h1>
+                
+                <span>Enter activation code from your Email.</span>
+                <input type="text" name="code" [(ngModel)]="code" placeholder="Code">
+                <button (click)="onActivate()">Activate</button>
+            </form>
+
+            <img *ngIf="loading" width="300" style="margin-top: 150px;" src="https://payload.cargocollective.com/1/10/339592/14075299/RabbitRun_final.gif" alt="Registration in progress...">
         </div>
-        <div class="form-container sign-in" >
+        <div *ngIf="!loading" class="form-container sign-in" >
             <form>
                 <h1>Sign In</h1>
                 <div class="social-icons">
