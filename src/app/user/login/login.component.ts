@@ -4,8 +4,10 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErr
 import { Router } from '@angular/router';
 import { User } from '../models/user.model';
 import { UserService } from '../user.service';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { __values } from 'tslib';
+import { LoginDetails } from '../models/login-details.model';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +21,7 @@ export class LoginComponent implements OnInit {
   isRegister: boolean = false;
   loading: boolean = false;
   code: string = "";
+  loginErrorMessage: string = "";
 
   registerForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -40,7 +43,11 @@ export class LoginComponent implements OnInit {
     role : 0
   };
   checkPassword: string = "";
-  loginObj: LoginModel  = new LoginModel();
+  loginDetails: LoginDetails = {
+      email: '',
+      password: ''
+    }
+  sendCodeAgain: boolean = false; 
 
   constructor(private router: Router, private service: UserService, private http: HttpClient){}
 
@@ -73,9 +80,10 @@ export class LoginComponent implements OnInit {
 
     this.loading = true;
     this.http.post<User>("http://localhost:8080/api/user", user).subscribe({
-      next: () =>{
+      next: (res) =>{
         this.loading = false
         this.isRegister = true;
+        this.user = res;
       }
   })
     // this.service.registerUser(this.user).subscribe({
@@ -87,10 +95,31 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin() {
-    alert("Login");
+    
+    this.http.post<User>(`http://localhost:8080/api/user/login`, this.loginDetails).subscribe({
+      next: () =>{
+        this.isSignDivVisiable = false;
+        this.loginErrorMessage = '';
+        this.loginDetails.email = '';
+        this.loginDetails.password = '';
+        alert("Successfully signed in!");
+      },
+      error: (err: HttpErrorResponse) =>{
+        if(err.status == 404)
+          this.loginErrorMessage = "Account with this email doesnt exist.";
+        if(err.status == 400)
+          this.loginErrorMessage = "The password is not correct.";
+         if(err.status == 422 ){
+          this.loginErrorMessage = "You are not acitvate account.";
+          this.sendCodeAgain = true;
+         }
+      }
+    })
   }
   
   onActivate(){
+    if(this.user.email === '')
+      this.user.email = this.loginDetails.email;
     this.http.get<User>(`http://localhost:8080/api/user/activate/${this.user.email}/${this.code}`).subscribe({
       next: () =>{
         this.isSignDivVisiable = false;
@@ -98,15 +127,19 @@ export class LoginComponent implements OnInit {
     })
   }
 
-}
-
-
-export class LoginModel  { 
-  email: string;
-  password: string;
-
-  constructor() {
-    this.email = ""; 
-    this.password= ""
+  sendCode() {
+    this.loading = true;
+    console.log(this.loginDetails.email)
+    this.http.get<string>(`http://localhost:8080/api/user/code/${this.loginDetails.email}`).subscribe({
+      next: () =>{
+        this.isRegister = true;
+        this.isSignDivVisiable = true;
+        this.loading = false;
+        this.sendCodeAgain = false;
+        this.loginErrorMessage = '';
+      }
+    })
   }
+
 }
+
