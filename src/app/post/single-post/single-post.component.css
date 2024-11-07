@@ -1,0 +1,120 @@
+.post-container {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  padding: 15px;
+  max-width: 600px;
+  width: 100%;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.post-author {
+  display: flex;
+  align-items: center;
+}
+
+.author-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.author-name {
+  font-weight: bold;
+}
+
+.post-date {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.post-image img {
+  width: 100%;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+.post-description {
+  font-size: 1rem;
+  margin-top: 10px;
+  color: #333;
+}
+
+.post-likes-comments {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+.likes {
+  display: flex;
+  align-items: center;
+}
+.like-icon {
+  font-size: 24px;
+  cursor: pointer;
+  color: #ccc; /* Siva boja za ne-lajkovanu ikonu */
+  transition: color 0.3s ease;
+}
+
+.like-icon.liked {
+  color: blue; /* Plava boja kada je ikona lajkovana */
+}
+.like-count {
+  color: #555;
+}
+
+.comments {
+  cursor: pointer;
+  color: #007bff;
+}
+
+.comments-section {
+  margin-top: 15px;
+}
+
+.comment {
+  margin-bottom: 10px;
+}
+
+.comment-author {
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.comment-text {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 5px;
+}
+.like-img {
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+.post-date {
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+  color: #555; /* Siva boja za tekst */
+  background-color: #f0f0f0; /* Svetla pozadina za kontrast */
+  padding: 5px 10px;
+  border-radius: 15px; /* Zaokruženi ivici */
+  display: inline-block;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Blaga senka */
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.post-date span {
+  font-weight: bold;
+  color: #333; /* Tamnija boja za datum */
+}
