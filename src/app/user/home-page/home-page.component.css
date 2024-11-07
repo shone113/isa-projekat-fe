@@ -1,0 +1,69 @@
+
+.post{
+    background-color: #fff;
+    width: 450px;
+    border-radius: 10px;
+    border: 2px solid #ddd;  /* Dodajte ivicu */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    margin: 20px auto;
+}
+.user{
+    display: flex;
+}
+img{
+    margin-left: 10px;
+}
+.like{
+    display: flex;
+}
+.like p{
+    margin-top: 15px;
+}
+.user img{
+    margin-top: 15px;
+    margin-right: 15px;
+}
+.description p{
+    margin: 10px;
+}
+small{
+    margin: 10px;
+}
+h3{
+    margin-left: 10px;
+}
+.comments{
+    max-height: 200px;
+    overflow-y: auto;
+}
+.comment{
+    background-color: #fff;
+    width: 400px;
+    border-radius: 10px;
+    border: 2px solid #ddd;  /* Dodajte ivicu */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    margin: 20px auto;
+}
+.comment p{
+    margin-left: 20px;
+    margin-top: -10px;
+}
+.you-comment{
+    display: flex;
+    margin: 5px;
+}
+form{
+    display: flex;
+}
+form button{
+    margin: 10px;
+}
+textarea{
+    margin-left: 10px;
+    width: 300px;
+    border-radius: 12px;
+}

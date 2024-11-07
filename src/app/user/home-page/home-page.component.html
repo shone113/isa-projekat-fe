@@ -1,0 +1,43 @@
+<div class="home">
+    <div class="post" *ngFor="let a of b">
+        <div class="user">
+            <img src="https://cdn-icons-png.flaticon.com/128/149/149071.png" alt="user" width="40" height="40">
+            <h2>John Johnie</h2>
+        </div>
+        
+        <div>
+            <img width="430" height="300" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Oryctolagus_cuniculus_Tasmania_2_%28cropped%29.jpg/800px-Oryctolagus_cuniculus_Tasmania_2_%28cropped%29.jpg" alt="">
+        </div>
+        <div class="like">
+            <img src="https://cdn-icons-png.flaticon.com/128/883/883760.png" alt="Like" width="40" height="40">
+            <p>100</p>
+            <img src="https://cdn-icons-png.flaticon.com/128/18098/18098957.png" alt="Comment" width="40" height="40">
+            <p>100</p>
+        </div>
+        <div class="description">
+            <p>They are familiar throughout the world as a wild prey animal, a domesticated form of livestock, and a pet, having a widespread</p>
+            <small>12.12.2021</small>
+        </div>
+        
+        <div>
+            <h3>Comments:</h3>
+            <div class="comments">
+                <div class="comment" *ngFor="let a of b">
+                    <div class="user">
+                        <img src="https://cdn-icons-png.flaticon.com/128/149/149071.png" alt="user" width="25" height="25">
+                        <h5>John Johnie</h5>
+                    </div>
+                    <p>ResearchRabbit learns what you love and improves its recommendations</p>
+                </div>
+            </div>
+            <div class="you-comment">
+                <img src="https://cdn-icons-png.flaticon.com/128/149/149071.png" alt="user" width="25" height="25">
+                <form>
+                    <textarea id="w3review" name="w3review" rows="4" cols="50">Enter your comment...</textarea>
+                    <!-- <mat-icon>send</mat-icon> -->
+                </form>
+            </div>
+        </div>
+        
+    </div>
+</div>
