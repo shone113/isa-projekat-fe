@@ -1,0 +1,51 @@
+<div class="post-container">
+  <div class="post-header">
+    <div class="post-author">
+      <!-- <img class="author-avatar" src="{{ post.authorAvatar }}" alt="Author's Avatar"> -->
+      <!-- <span class="author-name">{{ post.authorName }}</span> -->
+      <span class="author-name">Shoneee</span>
+
+    </div>
+    <!-- <span class="post-date">{{ post.date | date:'short' }}</span> -->
+    <div class="post-date">
+      <span>12/10/2025</span>
+    </div>
+  </div>
+
+  <div class="post-image">
+    <!-- <img [src]="post.imageUrl" alt="Post Image"> -->
+    <img src="../../../assets/images/bunny.jpg" alt="Post Image">
+  </div>
+
+  <div class="post-description">
+    <!-- <p>{{ post.description }}</p> -->
+    <p>ovo je opis neki</p>
+  </div>
+
+  <div class="post-likes-comments">
+    <div class="likes">
+      <div class="post-likes-comments">
+        <div class="likes">
+          <!-- Ikona srca koja se menja na klik -->
+          <i class="like-icon fas fa-heart" [class.liked]="isLiked" (click)="likePost()"></i>
+          <span class="like-count">19</span>
+        </div>
+      </div>
+    </div>
+    <div class="comments">
+      <span>5</span>
+      <!-- <span (click)="showComments()">{{ post.comments.length }} Comments</span> -->
+    </div>
+  </div>
+
+  <app-comments-preview></app-comments-preview>
+
+   <!-- <app-single-comment></app-single-comment> -->
+  <!--
+  <div *ngIf="showCommentSection" class="comments-section">
+    <div *ngFor="let comment of post.comments" class="comment">
+      <div class="comment-author">{{ comment.author }}</div>
+      <p class="comment-text">{{ comment.text }}</p>
+    </div>
+  </div> -->
+</div>
