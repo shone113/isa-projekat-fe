@@ -1,1 +1,3 @@
-<p>posts-preview works!</p>
+<div  *ngFor="let post of posts" class="posts-container" >
+  <app-single-post [post]="post" (postDeleted)="removePost($event)"></app-single-post>
+</div>

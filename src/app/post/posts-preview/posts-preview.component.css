@@ -1,0 +1,15 @@
+
+app-single-post {
+  display: block;  /* Obezbeđuje da svaki post bude u svom bloku */
+  margin-bottom: 30px;  /* Razmak između postova */
+  padding: 15px;  /* Unutrašnji razmak unutar svakog posta */
+  border: 4px solid #ddd;  /* Tanak border oko posta */
+  border-radius: 8px;  /* Zaokruženi ivice bordera */
+  box-shadow: 3 4px 8px rgba(0, 0, 0, 0.1);  /* Senka sa blagim efektom */
+  background-color: #fff;  /* Belo pozadinsko bojanje za post */
+}
+
+/* Možeš dodati i stil za hover efekat */
+app-single-post:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);  /* Intenzivnija senka kada je post označen */
+}
