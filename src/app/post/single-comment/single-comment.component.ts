@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Comment } from '../models/single-post.model';
 
 @Component({
   selector: 'app-single-comment',
@@ -10,6 +11,6 @@ import { Component, Input } from '@angular/core';
   styleUrl: './single-comment.component.css'
 })
 export class SingleCommentComponent {
-    // @Input() comment: { author: string, content: string, date: Date };
+    @Input() comment: Comment | undefined;
 
 }
