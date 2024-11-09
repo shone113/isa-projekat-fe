@@ -6,6 +6,8 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { SinglePostComponent } from './single-post/single-post.component';
 import { PostsPreviewComponent } from './posts-preview/posts-preview.component';
 import { HttpClientModule, provideHttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [

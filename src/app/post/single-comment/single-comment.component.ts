@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Comment } from '../models/single-post.model';
-
+import { Comment } from '../models/comment.model'
 @Component({
   selector: 'app-single-comment',
   standalone: true,
@@ -11,6 +10,9 @@ import { Comment } from '../models/single-post.model';
   styleUrl: './single-comment.component.css'
 })
 export class SingleCommentComponent {
-    @Input() comment: Comment | undefined;
+    @Input() comment!: Comment;
 
+  ngOnInit(): void{
+    console.log("Maliiiiiiiiiii komentar: ", this.comment);
+  }
 }

@@ -113,6 +113,11 @@
   display: flex;
   align-items: center;
 }
+.likes .like-count {
+  padding-left: 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
 .like-icon {
   font-size: 24px;
   cursor: pointer;

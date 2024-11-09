@@ -1,0 +1,15 @@
+<div class="comments-section-container">
+  <div class="edit-post-form">
+    <div class="form-group">
+      <label for="imageName">Slika</label>
+      <input id="imageName" [(ngModel)]="updatingPost.image" class="form-control" />
+    </div>
+    <div class="form-group">
+      <label for="imageDescription">Opis</label>
+      <textarea id="imageDescription" [(ngModel)]="updatingPost.description" class="form-control"></textarea>
+    </div>
+
+    <button (click)="onDiscardEdit()" class="btn btn-secondary">Discard</button>
+    <button (click)="onEditPost()" class="btn btn-primary">Edit</button>
+  </div>
+</div>

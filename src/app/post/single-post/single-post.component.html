@@ -27,7 +27,7 @@
     <div class="post-likes-comments">
       <div class="likes">
         <i class="like-icon fas fa-heart" [class.liked]="isLiked" (click)="likePost()"></i>
-        <span class="like-count">{{post.likes}}</span>
+        <span class="like-count">{{post.likesCount}}</span>
       </div>
       <div class="comments">
         <span>{{ post.comments.length }} comments</span>
@@ -35,14 +35,18 @@
     </div>
   </div>
 
-  <div class="comments-section-container">
-    <div *ngIf="showCommentSection" class="comments-section">
+  <div *ngIf="!showEditForm" class="comments-section-container">
+    <div *ngIf="showCommentSection && comments.length > 0" class="comments-section">
       <div class="comments-list">
-        <div *ngFor="let comment of post.comments" class="comment">
+        <div *ngFor="let comment of comments"  class="comment">
           <app-single-comment [comment]="comment"></app-single-comment>
         </div>
       </div>
     </div>
-    <app-comment-form class="comment-form"></app-comment-form>
+    <app-comment-form class="comment-form"  (reloadComments)="onReloadComments()" [postId]="post.id"></app-comment-form>
   </div>
+
+  <div *ngIf="showEditForm" class="comments-section-container">
+     <app-update-post-form *ngIf="post" [postId]="post.id" [post]="post" (toggleUpdateMenu)="onToggleUpdateMenu()"></app-update-post-form>
+    </div>
 </div>
