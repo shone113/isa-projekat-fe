@@ -13,6 +13,5 @@ export class SingleCommentComponent {
     @Input() comment!: Comment;
 
   ngOnInit(): void{
-    console.log("Maliiiiiiiiiii komentar: ", this.comment);
   }
 }
