@@ -7,8 +7,8 @@ import { PostsPreviewComponent } from './post/posts-preview/posts-preview.compon
 export const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'home', component: HomePageComponent},
   { path: 'single-post', component: SinglePostComponent},
   { path: 'single-post', component: SinglePostComponent},
-  { path: 'posts-preview', component: PostsPreviewComponent }
+  { path: 'posts-preview', component: PostsPreviewComponent },
+  { path: 'home', component: PostsPreviewComponent }
 ];

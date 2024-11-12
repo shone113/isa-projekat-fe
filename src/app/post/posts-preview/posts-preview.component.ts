@@ -1,6 +1,6 @@
 import { Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import { SinglePostComponent } from '../single-post/single-post.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { Post } from '../models/single-post.model';
 import { PostService } from '../post.service';
 import { Router } from '@angular/router';

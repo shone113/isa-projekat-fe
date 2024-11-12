@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Input, Output } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 @Component({
@@ -36,8 +36,11 @@ export class CommentFormComponent implements OnInit, OnChanges {
       postId: this.postId,
       creatorId: 1
     };
-
-    this.http.post<Comment>('http://localhost:8080/api/comment', commentDTO).subscribe({
+    const token = localStorage.getItem('jwt');
+    const headers = new HttpHeaders({
+      'Authorization': token ? `Bearer ${token}` : ''
+    });
+    this.http.post<Comment>('http://localhost:8080/api/comment', commentDTO,{headers}).subscribe({
       next: (response) => {
         console.log('Komentar uspešno kreiran:', response);
 
@@ -46,6 +49,7 @@ export class CommentFormComponent implements OnInit, OnChanges {
       },
       error: (err) => {
         console.error('Greška pri kreiranju komentara:', err);
+        alert("You are need to login!")
       }
     });
   }

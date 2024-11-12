@@ -77,12 +77,15 @@ export class LoginComponent implements OnInit {
       password: this.registerForm.value.password!,
       role: 0, 
     };
-
+    this.loginErrorMessage = '';
+    this.loginDetails.email = '';
+    this.loginDetails.password = '';
     this.loading = true;
-    this.http.post<User>("http://localhost:8080/api/user", user).subscribe({
+    this.http.post<User>("http://localhost:8080/auth/signup", user).subscribe({
       next: (res) =>{
         this.loading = false
         this.isRegister = true;
+        this.isSignDivVisiable = false;
         this.user = res;
       }
   })
@@ -96,23 +99,25 @@ export class LoginComponent implements OnInit {
 
   onLogin() {
     
-    this.http.post<User>(`http://localhost:8080/api/user/login`, this.loginDetails).subscribe({
-      next: () =>{
-        this.isSignDivVisiable = false;
+    this.http.post<any>(`http://localhost:8080/auth/login`, this.loginDetails).subscribe({
+      next: (res) =>{
         this.loginErrorMessage = '';
         this.loginDetails.email = '';
         this.loginDetails.password = '';
-        alert("Successfully signed in!");
+        console.log(res.accessToken);
+        localStorage.setItem("jwt", res.accessToken);
+        this.router.navigate(["home"])
       },
       error: (err: HttpErrorResponse) =>{
         if(err.status == 404)
           this.loginErrorMessage = "Account with this email doesnt exist.";
-        if(err.status == 400)
+        if(err.status == 401)
           this.loginErrorMessage = "The password is not correct.";
-         if(err.status == 422 ){
+         if(err.status == 406 ){
           this.loginErrorMessage = "You are not acitvate account.";
           this.sendCodeAgain = true;
          }
+         localStorage.clear();
       }
     })
   }
@@ -126,20 +131,6 @@ export class LoginComponent implements OnInit {
       }
     })
   }
-
-  sendCode() {
-    this.loading = true;
-    console.log(this.loginDetails.email)
-    this.http.get<string>(`http://localhost:8080/api/user/code/${this.loginDetails.email}`).subscribe({
-      next: () =>{
-        this.isRegister = true;
-        this.isSignDivVisiable = true;
-        this.loading = false;
-        this.sendCodeAgain = false;
-        this.loginErrorMessage = '';
-      }
-    })
-  }
-
+  
 }
 
