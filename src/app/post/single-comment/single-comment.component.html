@@ -1,6 +1,6 @@
 <div class="comment">
   <div class="comment-author">
-    <span class="author-name">{{ comment.creatorName }}  {{ comment.creatorSurname }}</span>
+    <span (click)="viewProfile()" style="cursor: pointer;" class="author-name">{{ comment.creatorName }}  {{ comment.creatorSurname }}</span>
 
     <span class="comment-date">{{ comment.creationDate }}</span>
 

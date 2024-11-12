@@ -3,7 +3,8 @@
     <h1>OnlyBuns</h1>
     <div class="button-container">
         <button (click)="home()">Home</button>
-        <button (click)="login()">Login</button>
+        <button *ngIf="getToken() === null" (click)="login()">Login</button>
+        <button *ngIf="getToken() !== null" (click)="logout()">Logout</button>
     </div>
     
 </div>
