@@ -25,7 +25,6 @@ import { UpdatePostFormComponent } from '../update-post-form/update-post-form.co
   styleUrl: './single-post.component.css'
 })
 export class SinglePostComponent implements OnInit, OnChanges {
-
   // post: Post;
   @Input() post!: Post;
   comments: Comment[] = [];
@@ -119,6 +118,10 @@ export class SinglePostComponent implements OnInit, OnChanges {
   onPostUpdated() {
     console.log("EVO ME NA LAPO");
     this.postUpdated.emit();
+  }
+
+  viewProfile() {
+    this.router.navigate(["profile"])
   }
 
 }
