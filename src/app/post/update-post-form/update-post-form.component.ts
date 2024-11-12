@@ -27,6 +27,7 @@ export class UpdatePostFormComponent implements OnInit, OnChanges {
     image: 'string',
   };
   @Output() toggleUpdateMenu = new EventEmitter();
+  @Output() postUpdated = new EventEmitter<void>();
 
 
   constructor(private router: Router, private http: HttpClient){
@@ -40,16 +41,19 @@ export class UpdatePostFormComponent implements OnInit, OnChanges {
     console.log("Odozgo: ", this.post);
     console.log("Datum: ", this.post.date);
     console.log("Ovaj moj: ", this.updatingPost);
+    this.updatingPost.id = this.postId;
     this.updatingPost.likesCount = this.post.likesCount;
-    this.updatingPost.publishingDate.setDate(Date.now());
+    this.updatingPost.publishingDate = this.post.publishingDate;
     this.updatingPost.image = this.post.image;
+    this.updatingPost.description = this.post.description;
   }
 
   onEditPost(): void {
-    this.http.put(`http://localhost:8080/api/post/${this.postId}`, this.updatingPost).subscribe({
+    console.log("UPDATING", this.updatingPost);
+    this.http.put<Post>(`http://localhost:8080/api/post/update/${this.postId}`, this.updatingPost).subscribe({
       next: (response) => {
-        console.log("Post je ažuriran:", response);
         this.toggleUpdateMenu.emit();
+        this.postUpdated.emit();
       },
       error: (error) => {
         console.error("Greška pri ažuriranju posta:", error);

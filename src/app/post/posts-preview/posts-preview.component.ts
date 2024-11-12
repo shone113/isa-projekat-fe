@@ -6,7 +6,7 @@ import { PostService } from '../post.service';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-
+import { EventEmitter } from '@angular/core';
 @Component({
   selector: 'app-posts-preview',
   standalone: true,
@@ -23,17 +23,24 @@ export class PostsPreviewComponent implements OnChanges, OnInit {
   posts: Post[] = []
   constructor(private router: Router, private http: HttpClient){}
 
-
   ngOnChanges(changes: SimpleChanges): void {
   }
 
   ngOnInit(): void{
+   this.loadPosts();
+  }
+
+  loadPosts(): void{
     this.http.get<Post[]>(`http://localhost:8080/api/post`).subscribe({
       next: (response) =>{
         this.posts = response;
-        console.log(this.posts);
       }
     })
+  }
+
+  onPostUpdated() {
+    console.log('Post je ažurirannnn. Ponovo učitavam postove.');
+    this.loadPosts();
   }
 
   removePost(id: number): void {

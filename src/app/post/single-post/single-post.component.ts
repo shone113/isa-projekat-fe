@@ -18,7 +18,6 @@ import { UpdatePostFormComponent } from '../update-post-form/update-post-form.co
     CommonModule,
     SingleCommentComponent,
     CommentFormComponent,
-    HttpClientModule,
     CommonModule,
     UpdatePostFormComponent
   ],
@@ -28,13 +27,14 @@ import { UpdatePostFormComponent } from '../update-post-form/update-post-form.co
 export class SinglePostComponent implements OnInit, OnChanges {
 
   // post: Post;
-  @Input() post!: Post;  // Ovdje primaš post podatke
+  @Input() post!: Post;
   comments: Comment[] = [];
   isLiked: boolean = false;
   showCommentSection: boolean = true;
-  @Output() postDeleted = new EventEmitter<number>(); // Emituje ID izbrisanog posta
+  @Output() postDeleted = new EventEmitter<number>();
   profileId: number = 1;
   showEditForm: boolean = false;
+  @Output() postUpdated = new EventEmitter<void>();
 
   constructor(private router: Router, private http: HttpClient){}
 
@@ -62,7 +62,6 @@ export class SinglePostComponent implements OnInit, OnChanges {
     if(this.isLiked){
       this.http.put<Post>(`http://localhost:8080/api/post/like/${this.post.id}?profileId=${this.profileId}`, null, {headers}).subscribe({
         next: (response) => {
-          console.log('Post lajkovan:', response);
           this.post = response;
         },
         error: (err) => {
@@ -73,7 +72,6 @@ export class SinglePostComponent implements OnInit, OnChanges {
     }else{
       this.http.put<Post>(`http://localhost:8080/api/post/unlike/${this.post.id}?profileId=${this.profileId}`, null, {headers}).subscribe({
         next: (response) => {
-          console.log('Post lajkovan:', response);
           this.post = response;
         },
         error: (err) => {
@@ -95,8 +93,6 @@ export class SinglePostComponent implements OnInit, OnChanges {
     });
     this.http.delete<Post[]>(`http://localhost:8080/api/post/` + id, {headers}).subscribe({
       next: (response) =>{
-        console.log("OVAJ ID BRISEEM", id);
-        console.log(response);
         this.postDeleted.emit(id); // Emituje ID izbrisanog posta
 
       }
@@ -117,8 +113,12 @@ export class SinglePostComponent implements OnInit, OnChanges {
   }
 
   onToggleUpdateMenu(): void{
-    console.log("Eo me");
     this.showEditForm = !this.showEditForm;
+  }
+
+  onPostUpdated() {
+    console.log("EVO ME NA LAPO");
+    this.postUpdated.emit();
   }
 
 }
