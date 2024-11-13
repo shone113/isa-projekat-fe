@@ -6,6 +6,7 @@ export class Post {
   date: Date;
   comments: Comment[];
   publishingDate: Date;
+  creatorProfileId: number;
 
   constructor(
     id: number,
@@ -14,7 +15,8 @@ export class Post {
     likesCount: number,
     date: Date,
     comments: Comment[],
-    publishingDate: Date
+    publishingDate: Date,
+    creatorProfileId: number
   ) {
     this.id = id;
     this.image = image;
@@ -23,6 +25,7 @@ export class Post {
     this.date = date;
     this.comments = comments;
     this.publishingDate = publishingDate;
+    this.creatorProfileId = creatorProfileId;
   }
 }
 

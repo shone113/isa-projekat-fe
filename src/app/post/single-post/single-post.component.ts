@@ -11,6 +11,8 @@ import { EventEmitter } from '@angular/core';
 import { Output } from '@angular/core';
 import { Comment } from '../models/comment.model';
 import { UpdatePostFormComponent } from '../update-post-form/update-post-form.component';
+import { jwtDecode } from "jwt-decode";
+
 @Component({
   selector: 'app-single-post',
   standalone: true,
@@ -34,6 +36,8 @@ export class SinglePostComponent implements OnInit, OnChanges {
   profileId: number = 1;
   showEditForm: boolean = false;
   @Output() postUpdated = new EventEmitter<void>();
+  userId: number | null = null;
+  loggedProfileId: number | null = null;
 
   constructor(private router: Router, private http: HttpClient){}
 
@@ -50,6 +54,19 @@ export class SinglePostComponent implements OnInit, OnChanges {
         console.error('Greška pri učitavanju komentara:', err);
       }
     });
+
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      try {
+        const decodedToken: any = jwtDecode(token);
+        this.loggedProfileId = decodedToken.profileId;
+        // this.userId = decodedToken.user.id;
+        console.log("EVOOOOOO MEEEEEE EEEEEEJJJJJJJJ   ", decodedToken);
+      } catch (e) {
+        console.error('Greška pri dekodiranju tokena:', e);
+      }
+    }
+
   }
 
   likePost(): void{
