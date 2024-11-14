@@ -4,7 +4,7 @@
 
       <div class="post-author">
         <div>
-          <span class="author-name" (click)="viewProfile()" style="cursor: pointer;">Shoneee</span>
+          <span class="author-name" (click)="viewProfile()" style="cursor: pointer;">{{post.creatorName}}  {{post.creatorSurname}}</span>
         </div>
         <div  *ngIf="loggedProfileId === post.creatorProfileId" class="author-actions">
           <i  class="fas fa-edit edit-icon" (click)="editPost()"></i>

@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { EventEmitter } from '@angular/core';
+import { jwtDecode } from "jwt-decode";
+
 @Component({
   selector: 'app-posts-preview',
   standalone: true,
@@ -21,13 +23,26 @@ import { EventEmitter } from '@angular/core';
 export class PostsPreviewComponent implements OnChanges, OnInit {
 
   posts: Post[] = []
+  loggedProfileId = null;
   constructor(private router: Router, private http: HttpClient){}
 
   ngOnChanges(changes: SimpleChanges): void {
   }
 
   ngOnInit(): void{
-   this.loadPosts();
+     const token = localStorage.getItem('jwt');
+    if (token) {
+      try {
+        const decodedToken: any = jwtDecode(token);
+        console.log("TOKEEEEEEEEEEEEENN POOOOOSSTOJIIIIIIIII   ", decodedToken);
+        this.loadPostsForLoggedUser(token);
+      } catch (e) {
+        console.error('Greška pri dekodiranju tokena:', e);
+      }
+    }else{
+      console.log("TOKEEEEEEEEEEEEENN NNNNEEEEEEPOOOOOSSTOJIIIIIIIII   ", this.loggedProfileId);
+      this.loadPosts();
+    }
   }
 
   loadPosts(): void{
@@ -36,6 +51,18 @@ export class PostsPreviewComponent implements OnChanges, OnInit {
         this.posts = response;
       }
     })
+  }
+
+  loadPostsForLoggedUser(token: string): void{
+        const headers = new HttpHeaders({
+          'Authorization': token ? `Bearer ${token}` : ''
+        });
+        this.http.get<Post[]>(`http://localhost:8080/api/post/all-for-logged-user`, {headers}).subscribe({
+          next: (response) =>{
+            this.posts = response;
+            console.log("**************** POST **************", response);
+          }
+        })
   }
 
   onPostUpdated() {

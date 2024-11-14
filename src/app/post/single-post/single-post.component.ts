@@ -55,6 +55,9 @@ export class SinglePostComponent implements OnInit, OnChanges {
       }
     });
 
+    this.isLiked = this.post.liked;
+    console.log("LLLLLIIIIIIIIIIIIKKKKKKKKEEEEEEE: ", this.post.liked);
+
     const token = localStorage.getItem('jwt');
     if (token) {
       try {
