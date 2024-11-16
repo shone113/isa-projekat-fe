@@ -33,18 +33,27 @@ export class SinglePostComponent implements OnInit, OnChanges {
   isLiked: boolean = false;
   showCommentSection: boolean = true;
   @Output() postDeleted = new EventEmitter<number>();
-  profileId: number = 1;
   showEditForm: boolean = false;
   @Output() postUpdated = new EventEmitter<void>();
   userId: number | null = null;
   loggedProfileId: number | null = null;
-
+  token: any;
+  decodedToken: any;
   constructor(private router: Router, private http: HttpClient){}
 
   ngOnChanges(changes: SimpleChanges): void {
   }
 
   ngOnInit(): void {
+    this.token = localStorage.getItem("jwt") ? localStorage.getItem("jwt") : '';
+    if (this.token) {
+      try {
+        this.decodedToken = jwtDecode(this.token); // Koristite `default`
+        console.log('Dekodiran token:', this.decodedToken['profileId']);
+      } catch (error) {
+        console.error('Greška prilikom dekodiranja tokena:', error);
+      }
+    }
     this.http.get<Comment[]>(`http://localhost:8080/api/comment/by-post-id/${this.post.id}`).subscribe({
       next: (response) => {
         this.comments = response;
@@ -58,18 +67,6 @@ export class SinglePostComponent implements OnInit, OnChanges {
     this.isLiked = this.post.liked;
     console.log("LLLLLIIIIIIIIIIIIKKKKKKKKEEEEEEE: ", this.post.liked);
 
-    const token = localStorage.getItem('jwt');
-    if (token) {
-      try {
-        const decodedToken: any = jwtDecode(token);
-        this.loggedProfileId = decodedToken.profileId;
-        // this.userId = decodedToken.user.id;
-        console.log("EVOOOOOO MEEEEEE EEEEEEJJJJJJJJ   ", decodedToken);
-      } catch (e) {
-        console.error('Greška pri dekodiranju tokena:', e);
-      }
-    }
-
   }
 
   likePost(): void{
@@ -79,7 +76,7 @@ export class SinglePostComponent implements OnInit, OnChanges {
       'Authorization': token ? `Bearer ${token}` : ''
     });
     if(this.isLiked){
-      this.http.put<Post>(`http://localhost:8080/api/post/like/${this.post.id}?profileId=${this.profileId}`, null, {headers}).subscribe({
+      this.http.put<Post>(`http://localhost:8080/api/post/like/${this.post.id}?profileId=${this.decodedToken['profileId']}`, null, {headers}).subscribe({
         next: (response) => {
           this.post = response;
         },
@@ -89,7 +86,7 @@ export class SinglePostComponent implements OnInit, OnChanges {
         }
       });
     }else{
-      this.http.put<Post>(`http://localhost:8080/api/post/unlike/${this.post.id}?profileId=${this.profileId}`, null, {headers}).subscribe({
+      this.http.put<Post>(`http://localhost:8080/api/post/unlike/${this.post.id}?profileId=${this.decodedToken['profileId']}`, null, {headers}).subscribe({
         next: (response) => {
           this.post = response;
         },
