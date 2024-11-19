@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgModel } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { Post } from '../models/single-post.model';
@@ -50,7 +50,11 @@ export class UpdatePostFormComponent implements OnInit, OnChanges {
 
   onEditPost(): void {
     console.log("UPDATING", this.updatingPost);
-    this.http.put<Post>(`http://localhost:8080/api/post/update/${this.postId}`, this.updatingPost).subscribe({
+    const token = localStorage.getItem('jwt');
+    const headers = new HttpHeaders({
+      'Authorization': token ? `Bearer ${token}` : ''
+    });
+    this.http.put<Post>(`http://localhost:8080/api/post/update/${this.postId}`, this.updatingPost, {headers}).subscribe({
       next: (response) => {
         this.toggleUpdateMenu.emit();
         this.postUpdated.emit();

@@ -16,6 +16,9 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { SimpleChanges } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
+import { PageEvent } from '@angular/material/paginator';
+import { Page} from '../models/page.model';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-all-users',
@@ -43,7 +46,7 @@ export class AllUsersComponent {
   searchEmail: string = '';
   minPostsCount?: number;
   maxPostsCount?: number;
-  totalUsers = 22;
+  totalUsers! : number;
   users: User[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -60,18 +63,47 @@ export class AllUsersComponent {
     this.getUsers();
   }
 
-  getUsers(): void{
-    this.http.get<User[]>(`http://localhost:8080/api/user`).subscribe({
-      next: (response) => {
-        this.users = response;
+  getUsers(pageIndex: number = 0, pageSize: number = 5): void {
+    const params = new HttpParams()
+      .set('page', pageIndex.toString())
+      .set('size', pageSize.toString());
+
+      const token = localStorage.getItem('jwt');
+      const headers = new HttpHeaders({
+        'Authorization': token ? `Bearer ${token}` : ''
+      });
+
+    this.http.get<Page<User>>(`http://localhost:8080/api/user/paged`, { params, headers}).subscribe({
+      next: (response: Page<User>) => {
+        this.users = response.content;
         this.dataSource.data = this.users;
-        console.log("USERS", this.users);
+        this.totalUsers = response.totalElements;
+        console.log("USERS", response.content);
       },
       error: (err) => {
         console.error('Greška pri učitavanju korisnika:', err);
       }
     });
   }
+
+  onPageChange(event: PageEvent): void {
+    const pageIndex = event.pageIndex;
+    const pageSize = event.pageSize;
+    this.getUsers(pageIndex, pageSize);
+  }
+
+  // getUsers(): void{
+  //   this.http.get<User[]>(`http://localhost:8080/api/user`).subscribe({
+  //     next: (response) => {
+  //       this.users = response;
+  //       this.dataSource.data = this.users;
+  //       console.log("USERS", this.users);
+  //     },
+  //     error: (err) => {
+  //       console.error('Greška pri učitavanju korisnika:', err);
+  //     }
+  //   });
+  // }
 
   sortData() {
     const sortField = this.sort.active;  // Field to sort by (e.g., 'email' or 'followers')
@@ -82,14 +114,42 @@ export class AllUsersComponent {
     }
   }
 
-  getSortedUsers(sortField: string = 'name', sortDirection: string = 'asc'): void {
-    const url = `http://localhost:8080/api/user/sort/${sortField}-${sortDirection}`;
+  // getSortedUsers(sortField: string = 'name', sortDirection: string = 'asc'): void {
+  //   const url = `http://localhost:8080/api/user/sort/${sortField}-${sortDirection}`;
 
-    this.http.get<User[]>(url).subscribe({
-      next: (response) => {
-        this.users = response;
+  //   this.http.get<User[]>(url).subscribe({
+  //     next: (response) => {
+  //       this.users = response;
+  //       this.dataSource.data = this.users;
+  //       console.log('USERS', this.users);
+  //     },
+  //     error: (err) => {
+  //       console.error('Greška pri učitavanju korisnika:', err);
+  //     }
+  //   });
+  // }
+
+
+  getSortedUsers(sortField: string = 'name', sortDirection: string = 'asc'): void {
+    const pageIndex: number = 0
+    const pageSize: number = 5
+    const params = new HttpParams()
+    .set('page', pageIndex.toString())
+    .set('size', pageSize.toString());
+
+    const token = localStorage.getItem('jwt');
+    const headers = new HttpHeaders({
+      'Authorization': token ? `Bearer ${token}` : ''
+    });
+
+    const url = `http://localhost:8080/api/user/sort/${sortField}-${sortDirection}/paged`;
+
+    this.http.get<Page<User>>(url, {params, headers}).subscribe({
+      next: (response: Page<User>) => {
+        this.users = response.content;
         this.dataSource.data = this.users;
-        console.log('USERS', this.users);
+        this.totalUsers = response.totalElements;
+        console.log("USERS", response.content);
       },
       error: (err) => {
         console.error('Greška pri učitavanju korisnika:', err);
@@ -97,24 +157,57 @@ export class AllUsersComponent {
     });
   }
 
+  // onSearch(): void{
+  //   // Prikupljanje svih parametara sa forme
+  //   const params = new HttpParams()
+  //     .set('name', this.searchName)
+  //     .set('surname', this.searchSurname)
+  //     .set('email', this.searchEmail)
+  //     .set('minPostsRange', this.minPostsCount ? this.minPostsCount.toString() : '')
+  //     .set('maxPostsRange', this.maxPostsCount ? this.maxPostsCount.toString() : '');
+
+  //   this.http.get<User[]>('http://localhost:8080/api/user/filter', { params })
+  //     .subscribe({
+  //       next: (response) => {
+  //         this.users = response;
+  //         this.dataSource.data = this.users;
+  //       },
+  //       error: (err) => {
+  //         console.error('Greška pri učitavanju korisnika:', err);
+  //       }
+  //     });
+  // }
+
   onSearch(): void{
-    // Prikupljanje svih parametara sa forme
+    const pageIndex: number = 0
+    const pageSize: number = 5
+
+    const token = localStorage.getItem('jwt');
+    const headers = new HttpHeaders({
+      'Authorization': token ? `Bearer ${token}` : ''
+    });
     const params = new HttpParams()
       .set('name', this.searchName)
       .set('surname', this.searchSurname)
       .set('email', this.searchEmail)
       .set('minPostsRange', this.minPostsCount ? this.minPostsCount.toString() : '')
-      .set('maxPostsRange', this.maxPostsCount ? this.maxPostsCount.toString() : '');
+      .set('maxPostsRange', this.maxPostsCount ? this.maxPostsCount.toString() : '')
+      .set('page', pageIndex.toString())
+      .set('size', pageSize.toString());
 
-    this.http.get<User[]>('http://localhost:8080/api/user/filter', { params })
+
+    this.http.get<Page<User>>('http://localhost:8080/api/user/filter/paged', { params, headers })
       .subscribe({
-        next: (response) => {
-          this.users = response;
+        next: (response: Page<User>) => {
+          this.users = response.content;
           this.dataSource.data = this.users;
+          this.totalUsers = response.totalElements;
+          console.log("USERS", response.content);
         },
         error: (err) => {
           console.error('Greška pri učitavanju korisnika:', err);
         }
       });
   }
+
 }
