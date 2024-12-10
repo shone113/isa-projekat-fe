@@ -138,7 +138,7 @@ export class SinglePostComponent implements OnInit, OnChanges {
   }
 
   viewProfile() {
-    this.router.navigate(["profile"])
+    this.router.navigate([`profile/${this.post.creatorProfileId}`])
   }
 
 }

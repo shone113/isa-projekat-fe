@@ -40,7 +40,9 @@ export class LoginComponent implements OnInit {
     email: '',
     password: '',
     //address: ''
-    role : 0
+    role : 0,
+    followingCount: 0,
+    followers: 0
   };
   checkPassword: string = "";
   loginDetails: LoginDetails = {
@@ -76,6 +78,8 @@ export class LoginComponent implements OnInit {
       email: this.registerForm.value.email!,
       password: this.registerForm.value.password!,
       role: 0, 
+      followingCount: 0,
+      followers: 0
     };
     this.loginErrorMessage = '';
     this.loginDetails.email = '';

@@ -14,5 +14,5 @@ export const routes: Routes = [
   { path: 'posts-preview', component: PostsPreviewComponent },
   { path: 'home', component: PostsPreviewComponent },
   { path: 'all-users', component: AllUsersComponent},
-  { path: 'profile', component: ProfileComponent}
+  { path: 'profile/:id', component: ProfileComponent}
 ];
