@@ -5,6 +5,7 @@ import { SinglePostComponent } from './post/single-post/single-post.component';
 import { PostsPreviewComponent } from './post/posts-preview/posts-preview.component';
 import { AllUsersComponent } from './auth/all-users/all-users.component';
 import { ProfileComponent } from './user/profile/profile.component';
+import { TrendsComponent } from './user/trends/trends.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -14,5 +15,6 @@ export const routes: Routes = [
   { path: 'posts-preview', component: PostsPreviewComponent },
   { path: 'home', component: PostsPreviewComponent },
   { path: 'all-users', component: AllUsersComponent},
-  { path: 'profile/:id', component: ProfileComponent}
+  { path: 'profile/:id', component: ProfileComponent},
+  { path: 'trends', component: TrendsComponent}
 ];

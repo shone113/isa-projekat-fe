@@ -1,0 +1,67 @@
+<div class="body">
+    <div class="total-count">
+        <div class="count">
+            <h1>{{totalPosts}}</h1>
+            <h5>Total Number Of Posts</h5>
+        </div>
+        <div class="count">
+            <h1>{{totalPostsLastMonth}}</h1>
+            <h5>Total Number Of Posts In Last Month</h5>
+        </div>
+    </div>
+    <div class="tags">
+        <h2 [class.active]="activeTag === 'mostPopularEver'" (click)="setActiveTag('mostPopularEver')">Most Popular Posts Ever</h2>
+        <h2 [class.active]="activeTag === 'mostPopularLastWeek'" (click)="setActiveTag('mostPopularLastWeek')">Most Popular Posts In Last Week</h2>
+        <h2 [class.active]="activeTag === 'mostAcrivedUsers'" (click)="setActiveTag('mostAcrivedUsers')">Most Actived Users</h2>
+    </div>
+    <div *ngIf="showPosts" class="lists">
+        <div *ngFor="let post of posts" class="posts-container" >
+            <div class="post-container">
+                <div class="post-header">
+            
+                  <div class="post-author">
+                    <div>
+                      <span class="author-name"  style="cursor: pointer;">{{post.creatorName}} a {{post.creatorSurname}}</span>
+                    </div>
+                  </div>
+                  <div class="post-date">
+                    <span>{{post.publishingDate}}</span>
+                  </div>
+                </div>
+            
+                <div class="post-image">
+                  <img [src]="'../../../assets/images/' + post.image" alt="Post Image">
+                </div>
+            
+                <div class="post-description">
+                  <p>{{post.description}}</p>
+                </div>
+            
+                <div class="post-likes-comments">
+                  <div class="likes">
+                    <i class="like-icon fas fa-heart" ></i>
+                    <span class="like-count">{{post.likesCount}}</span>
+                  </div>
+                  <div class="comments">
+                    <span>{{ post.comments.length }} comments</span>
+                  </div>
+                </div>
+              </div>
+        </div>  
+    </div>
+
+    <div *ngIf="!showPosts" class="card-container">
+        <div class="card" *ngFor="let user of users">
+          <div class="card-header">
+            <div class="user-avatar">
+              <img src="https://i.scdn.co/image/ab67616d0000b273a3890138ca68a04ed8dfa149" alt="User Avatar">
+            </div>
+            <h2>{{ user.name }} {{ user.surname }}</h2>
+          </div>
+          <div class="card-body">
+            <p><strong>Followers:</strong> {{ user.followers }}</p>
+            <p><strong>Following:</strong> {{ user.followingCount }}</p>
+          </div>
+        </div>
+      </div>
+</div>
