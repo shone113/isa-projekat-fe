@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Profile } from '../models/profile.model';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SinglePostComponent } from '../../post/single-post/single-post.component';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, SinglePostComponent, MatIconModule],
+  imports: [CommonModule, SinglePostComponent, MatIconModule, RouterModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -21,11 +21,9 @@ export class ProfileComponent implements OnInit {
   };
   followers: Profile[] = [];
   showFollowers: boolean = false;
-  constructor(private http: HttpClient, private route: ActivatedRoute){}
+  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router){}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params: ParamMap) => {
-    })
     var id = this.route.snapshot.paramMap.get('id');
     this.http.get<Profile>(`http://localhost:8080/api/profile?id=${id}`).subscribe({
       next: (res :Profile) => {
@@ -57,6 +55,16 @@ export class ProfileComponent implements OnInit {
     })
 
     this.showFollowers = true;
+  }
+
+  navigateToProfile(profileId: number){
+    this.router.navigate(['../', profileId], { relativeTo: this.route });
+    this.http.get<Profile>(`http://localhost:8080/api/profile?id=${profileId}`).subscribe({
+      next: (res :Profile) => {
+        this.profile = res;
+        this.showFollowers = false;
+      }
+    })
   }
 
 }

@@ -2,36 +2,26 @@
     <div class="header">
         <div class="user-info">
             <img src="https://5na5.rs/storage/2017/09/dusko-vujosevic.jpg" alt="">
+            <div class="profile-info">
+                <h2>{{profile.user?.name}} {{profile.user?.surname}}</h2>
+            </div>
         </div>
-        <div class="profile-infos">
-            <!-- <div class="profile-info">
-                <h1>{{profile.user?.name}} {{profile.user?.surname}}</h1>
-                <h1>{{profile.posts.length}}</h1>
-                <h1 (click)="openFollowerModal(1)" >{{profile.user?.followers}}</h1>
-                <h1 (click)="openFollowerModal(2)" >{{profile.user?.followingCount}} </h1>
-            </div>
-            <div class="profile-info">
-                <h2>{{profile.user?.email}}</h2>
-                <h2>posts</h2>
-                <h2 (click)="openFollowerModal(1)" >followers</h2>
-                <h2 (click)="openFollowerModal(2)" >following</h2>
-            </div> -->
-            <div class="profile-info">
-                <h1>{{profile.user?.name}} {{profile.user?.surname}}</h1>
-                <h2>{{profile.user?.email}}</h2>
-            </div>
-            <div class="profile-info">
-                <h1>{{profile.posts.length}}</h1>
-                <h2>Posts</h2>
-            </div>
-            <div class="profile-info">
-                <h1 (click)="openFollowerModal(2)" >{{profile.user?.followers}} </h1>
-                <h2>Followers</h2>
+        <div class="profile">
 
-            </div>
-            <div class="profile-info">
-                <h1 (click)="openFollowerModal(2)" >{{profile.user?.followingCount}} </h1>
-                <h2>Following</h2>
+            <div class="profile-infos">
+                <div class="profile-info">
+                    <h1>{{profile.posts.length}}</h1>
+                    <h2>Posts</h2>
+                </div>
+                <div class="profile-info" (click)="openFollowerModal(1)">
+                    <h1>{{profile.user?.followers}} </h1>
+                    <h2>Followers</h2>
+    
+                </div>
+                <div class="profile-info" (click)="openFollowerModal(2)">
+                    <h1>{{profile.user?.followingCount}} </h1>
+                    <h2>Following</h2>
+                </div>
             </div>
         </div>
        
@@ -55,7 +45,7 @@
             <div *ngIf="followers.length !== 0">
                 <div class="follower_list" *ngFor="let profile of followers">
                     <img src="https://www.vijesti.me/data/images/2021/07/08/11/5346463_1424218_ls.jpg" alt="Slika">
-                    <h2>{{profile.user?.email}}</h2>
+                    <h2 (click)="navigateToProfile(profile.id)">{{profile.user?.email}}</h2>
                     <button>Unfollow</button>
                 </div>
             </div>
