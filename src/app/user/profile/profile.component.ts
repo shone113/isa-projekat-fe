@@ -5,6 +5,9 @@ import { ActivatedRoute, ParamMap, Router, RouterModule } from '@angular/router'
 import { CommonModule } from '@angular/common';
 import { SinglePostComponent } from '../../post/single-post/single-post.component';
 import { MatIconModule } from '@angular/material/icon';
+import { HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { jwtDecode } from 'jwt-decode';
+import { Post } from '../../post/models/single-post.model';
 
 @Component({
   selector: 'app-profile',
@@ -21,19 +24,88 @@ export class ProfileComponent implements OnInit {
   };
   followers: Profile[] = [];
   showFollowers: boolean = false;
+  decodedToken: any;
+  loggedUserProfile: boolean = false;
+  followedByLoggedUser: boolean = false;
   constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router){}
 
   ngOnInit(): void {
     var id = this.route.snapshot.paramMap.get('id');
-    this.http.get<Profile>(`http://localhost:8080/api/profile?id=${id}`).subscribe({
+    const token = localStorage.getItem('jwt') || '';
+    this.decodedToken = jwtDecode(token); // Koristite `default`
+    console.log('Dekodiran token:', this.decodedToken['userId']);
+    const headers = new HttpHeaders({
+            'Authorization': token ? `Bearer ${token}` : ''
+          });
+    this.http.get<Profile>(`http://localhost:8080/api/profile?id=${id}`, {headers}).subscribe({
       next: (res :Profile) => {
         this.profile = res;
+        console.log("Profil pri ucitavanju ", res);
+        if(this.profile.user?.id == this.decodedToken['userId']){
+          this.loggedUserProfile = true;
+        }
+        console.log("TOKEN", this.profile.user?.id);
+
+        this.http.get<Profile[]>(`http://localhost:8080/api/profile/follower?id=${this.profile.id}`).subscribe({
+          next: (res: Profile[]) => {
+            //this.followers = res;
+            const profiles = res;
+            profiles.forEach(profile => {
+              if (profile.id == this.decodedToken['profileId']) {
+                this.followedByLoggedUser = true;
+              }
+            });
+
+            console.log('followedByLoggedUser  *J*J*J*J*J', this.followedByLoggedUser);
+          }
+        })
       }
     })
   }
-  selectedPost: any = null;
 
+  followUser() {
+    const token = localStorage.getItem('jwt');
+    const headers = new HttpHeaders({
+      'Authorization': token ? `Bearer ${token}` : ''
+    });
+    this.http.put<Profile[]>(`http://localhost:8080/api/profile/follow/${this.profile.id}?id=${this.decodedToken['profileId']}`, null, {headers}).subscribe({
+      next: (response) =>{
+        const followerIds = response.map(profile => profile.id);
+        this.profile.followers = followerIds;
+        if(this.profile.user){
+          this.profile.user.followersCount = response.length;
+          console.log("Duzinaaaa followera: ", response.length);
+        }
+        this.followedByLoggedUser = true;
+        console.log("**************** Profile **************", response);
+      }
+    })
+  }
+
+  unfollowUser(){
+    const token = localStorage.getItem('jwt');
+    const headers = new HttpHeaders({
+      'Authorization': token ? `Bearer ${token}` : ''
+    });
+    this.http.put<Profile[]>(`http://localhost:8080/api/profile/unfollow/${this.profile.id}?id=${this.decodedToken['profileId']}`, null, {headers}).subscribe({
+      next: (response) =>{
+        const followerIds = response.map(profile => profile.id);
+        this.profile.followers = followerIds;
+        if(this.profile.user){
+          this.profile.user.followersCount = response.length;
+          console.log("Duzinaaaa followera: ", response.length);
+        }
+        this.followedByLoggedUser = false;
+        console.log("**************** Profile **************", response);
+      }
+    })
+  }
+
+
+  selectedPost: Post | null = null;
   openModal(post: any) {
+    post.creatorName = this.profile.user?.name;
+    post.creatorSurname = this.profile.user?.surname;
     this.selectedPost = post;
   }
 

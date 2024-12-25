@@ -3,20 +3,26 @@
         <div class="user-info">
             <img src="https://5na5.rs/storage/2017/09/dusko-vujosevic.jpg" alt="">
             <div class="profile-info">
-                <h2>{{profile.user?.name}} {{profile.user?.surname}}</h2>
+                <!-- <h2>{{profile.user?.name}} {{profile.user?.surname}}</h2> -->
             </div>
         </div>
         <div class="profile">
 
+            <div>
+              <span class="profile-text">{{profile.user?.name}} {{profile.user?.surname}}</span>
+              <button *ngIf="!loggedUserProfile && !followedByLoggedUser" (click)="followUser()">Follow</button>
+              <button *ngIf="!loggedUserProfile && followedByLoggedUser" (click)="unfollowUser()">Unfollow</button>
+              <button *ngIf="!loggedUserProfile">Message</button>
+            </div>
             <div class="profile-infos">
                 <div class="profile-info">
                     <h1>{{profile.posts.length}}</h1>
                     <h2>Posts</h2>
                 </div>
                 <div class="profile-info" (click)="openFollowerModal(1)">
-                    <h1>{{profile.user?.followers}} </h1>
+                    <h1>{{profile.user?.followersCount}}</h1>
                     <h2>Followers</h2>
-    
+
                 </div>
                 <div class="profile-info" (click)="openFollowerModal(2)">
                     <h1>{{profile.user?.followingCount}} </h1>
@@ -24,10 +30,10 @@
                 </div>
             </div>
         </div>
-       
+
         <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="edit"></mat-icon>
     </div>
-   
+
    <div class="posts">
         <img *ngFor="let post of profile.posts" [src]="'../../../assets/images/' + post.image" alt="Post Image" (click)="openModal(post)">
    </div>
@@ -52,5 +58,5 @@
             <h2 *ngIf="followers.length === 0">This section is empty</h2>
         </div>
     </div>
-   
+
 </div>

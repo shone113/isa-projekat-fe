@@ -1,3 +1,5 @@
+import { User } from "../../user/models/user.model";
+
 export class Post {
   id: number;
   image: string;
@@ -10,6 +12,7 @@ export class Post {
   liked: boolean;
   creatorName: string;
   creatorSurname: string;
+  user?: User;
 
   constructor(
     id: number,

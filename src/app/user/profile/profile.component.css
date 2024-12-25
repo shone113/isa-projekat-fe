@@ -53,19 +53,19 @@
 
 .posts {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); 
+  grid-template-columns: repeat(3, 1fr);
   gap: 15px;
   margin: 20px 0;
-  justify-content: center; 
+  justify-content: center;
 }
 
 .posts img {
-  width: 100%; 
+  width: 100%;
   max-width: 333px;
   height: 226px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  object-fit: cover; 
+  object-fit: cover;
 }
 
 
@@ -122,29 +122,29 @@
 
 .follower_list {
   display: flex;
-  align-items: center; 
+  align-items: center;
   justify-content: space-between;
   padding: 10px;
-  border-bottom: 1px solid #ddd; 
+  border-bottom: 1px solid #ddd;
 }
 
 .follower_list img {
-  width: 50px; 
+  width: 50px;
   height: 50px;
-  border-radius: 50%; 
-  margin-right: 15px; 
+  border-radius: 50%;
+  margin-right: 15px;
 }
 
 .follower_list h2 {
-  flex-grow: 1; 
+  flex-grow: 1;
   margin: 0;
   font-size: 20px;
   font-weight: normal;
-  color: #333; 
+  color: #333;
 }
 
 .follower_list button {
-  background-color: #f44336; 
+  background-color: #f44336;
   color: white;
   border: none;
   border-radius: 5px;
@@ -154,14 +154,39 @@
 }
 
 .follower_list button:hover {
-  background-color: #d32f2f; 
+  background-color: #d32f2f;
 }
 
 mat-icon {
   position: absolute;
   top: 20px;
-  right: 30px; 
+  right: 30px;
   font-size: 24px;
-  color: #333; 
-  cursor: pointer; 
+  color: #333;
+  cursor: pointer;
+}
+button {
+  background-color: #E0E0E0; /* Neutralno siva */
+  border: 1px solid #D3D3D3; /* Svetlosiva granica */
+  border-radius: 10px; /* Zaobljeni uglovi */
+  padding: 8px 16px; /* Udoban razmak unutar dugmeta */
+  font-size: 18px; /* Prilagodljiva veličina teksta */
+  font-family: 'Proxima Nova', Arial, Helvetica, sans-serif;
+  color: #333333; /* Tamno siva boja teksta */
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+  margin-left: 20px;
+}
+
+button:hover {
+  background-color: #D6D6D6; /* Tamnija siva na hover */
+  border-color: #C0C0C0; /* Tamnija granica na hover */
+}
+
+button:active {
+  background-color: #C0C0C0; /* Još tamnija nijansa kad je pritisnuto */
+}
+.profile-text{
+  font-size: 25px; /* Prilagodljiva veličina teksta */
+  font-family: 'Proxima Nova', Arial, Helvetica, sans-serif;
 }

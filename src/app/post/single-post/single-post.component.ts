@@ -49,7 +49,8 @@ export class SinglePostComponent implements OnInit, OnChanges {
     if (this.token) {
       try {
         this.decodedToken = jwtDecode(this.token); // Koristite `default`
-        console.log('Dekodiran token:', this.decodedToken['profileId']);
+        //console.log('Dekodiran token:', this.decodedToken['profileId']);
+        console.log("Ovo je post koji hocu: ", this.post.creatorName, " ", this.post.creatorSurname);
       } catch (error) {
         console.error('Greška prilikom dekodiranja tokena:', error);
       }

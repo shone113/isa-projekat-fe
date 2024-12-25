@@ -7,5 +7,6 @@ export interface User{
     // address: string
     role: number,
     followers: number,
+    followersCount?: number,
     followingCount: number
 }
