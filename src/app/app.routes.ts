@@ -6,6 +6,7 @@ import { PostsPreviewComponent } from './post/posts-preview/posts-preview.compon
 import { AllUsersComponent } from './auth/all-users/all-users.component';
 import { ProfileComponent } from './user/profile/profile.component';
 import { TrendsComponent } from './user/trends/trends.component';
+import { AdminHomepageComponent } from './auth/admin-homepage/admin-homepage.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -16,5 +17,6 @@ export const routes: Routes = [
   { path: 'home', component: PostsPreviewComponent },
   { path: 'all-users', component: AllUsersComponent},
   { path: 'profile/:id', component: ProfileComponent},
-  { path: 'trends', component: TrendsComponent}
+  { path: 'trends', component: TrendsComponent},
+  { path: 'admin-homepage', component: AdminHomepageComponent}
 ];

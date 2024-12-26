@@ -1,0 +1,40 @@
+<div class="dashboard">
+  <div class="card-container">
+    <div class="card green" [routerLink]="'/all-users'">
+      <div>
+        <h2>Profiles</h2>
+        <p>All users profiles</p>
+      </div>
+      <div class="icon-div">
+        <mat-icon class="icon">groups</mat-icon>
+      </div>
+    </div>
+    <div class="card orange">
+      <div>
+        <h2>Analytics</h2>
+        <p>Application analytics</p>
+      </div>
+      <div class="icon-div">
+        <mat-icon class="icon">pie_chart</mat-icon>
+      </div>
+    </div>
+    <div class="card red" [routerLink]="'/trends'">
+      <div>
+        <h2>Trends</h2>
+        <p>Trending on network</p>
+      </div>
+      <div class="icon-div">
+        <mat-icon class="icon">trending_up</mat-icon>
+      </div>
+    </div>
+    <div class="card blue" [routerLink]="'/posts-preview'">
+      <div>
+        <h2>Posts</h2>
+        <p>Posts from all users</p>
+      </div>
+      <div class="icon-div">
+        <mat-icon class="icon">article</mat-icon>
+      </div>
+    </div>
+  </div>
+</div>

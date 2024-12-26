@@ -8,6 +8,8 @@ import { HttpClient, HttpClientModule, HttpErrorResponse } from '@angular/common
 import { __values } from 'tslib';
 import { LoginDetails } from '../models/login-details.model';
 import { takeUntil } from 'rxjs';
+import {jwtDecode} from 'jwt-decode';
+
 
 @Component({
   selector: 'app-login',
@@ -31,10 +33,10 @@ export class LoginComponent implements OnInit {
     password: new FormControl('', [Validators.required, Validators.minLength(6)]),
     checkPassword: new FormControl('', [Validators.required, Validators.minLength(6)])
   });
-  
+
 
   user: User = {
-    id: 0, 
+    id: 0,
     name: '',
     surname: '',
     email: '',
@@ -49,35 +51,35 @@ export class LoginComponent implements OnInit {
       email: '',
       password: ''
     }
-  sendCodeAgain: boolean = false; 
+  sendCodeAgain: boolean = false;
 
   constructor(private router: Router, private service: UserService, private http: HttpClient){}
 
   ngOnInit(): void {
-    
+
   }
 
   passwordMatchValidator():  boolean{
     const password = this.registerForm.get('password');
     const checkPassword = this.registerForm.get('checkPassword');
-    
+
     if (password && checkPassword && password.value !== checkPassword.value) {
-      return true;  
+      return true;
     }
-    return false;  
+    return false;
   }
 
   onRegister() {
     if(!this.registerForm.valid || this.passwordMatchValidator())
       return;
-     
+
     const user: User = {
       id: 0,
       name: this.registerForm.value.name!,
       surname: this.registerForm.value.surname!,
       email: this.registerForm.value.email!,
       password: this.registerForm.value.password!,
-      role: 0, 
+      role: 0,
       followingCount: 0,
       followers: 0
     };
@@ -98,19 +100,30 @@ export class LoginComponent implements OnInit {
     //     alert("Successfully register.")
     //   }
     // })
-    
+
   }
 
   onLogin() {
-    
+
     this.http.post<any>(`http://localhost:8080/auth/login`, this.loginDetails).subscribe({
       next: (res) =>{
         this.loginErrorMessage = '';
         this.loginDetails.email = '';
         this.loginDetails.password = '';
-        console.log(res.accessToken);
+        // console.log(res);
         localStorage.setItem("jwt", res.accessToken);
-        this.router.navigate(["home"])
+
+        const token = res.accessToken;
+        const decodedToken = jwtDecode(token);
+        console.log("OVAJ SE LOGUJEEEEEE");
+        console.log(decodedToken);
+        const userRole = (decodedToken as any).role;
+        console.log('User role:', userRole);
+        if(userRole == 'ROLE_ADMIN'){
+          this.router.navigate(["admin-homepage"])
+        }else{
+          this.router.navigate(["home"])
+        }
       },
       error: (err: HttpErrorResponse) =>{
         if(err.status == 404)
@@ -125,7 +138,7 @@ export class LoginComponent implements OnInit {
       }
     })
   }
-  
+
   onActivate(){
     if(this.user.email === '')
       this.user.email = this.loginDetails.email;
@@ -135,6 +148,6 @@ export class LoginComponent implements OnInit {
       }
     })
   }
-  
+
 }
 
