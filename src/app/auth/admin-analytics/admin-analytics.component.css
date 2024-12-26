@@ -1,0 +1,61 @@
+/* Opšti stilovi za sidebar */
+.container {
+  display: flex;
+  height: 100vh;
+  background-color: #f9f9f9; /* Neutralna pozadina za ceo container */
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #e2e2e2; /* Tamna boja za sidebar */
+  color: #fff;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Lagana senka */
+}
+
+.sidebar ul {
+  list-style-type: none; /* Bez oznaka na listi */
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  padding: 12px 15px;
+  margin-bottom: 5px;
+  background-color: #512da8; /* Boja za stavke menija */
+  border-radius: 5px; /* Zaobljeni uglovi */
+  cursor: pointer;
+  transition: all 0.3s ease; /* Glatka tranzicija za hover */
+}
+
+.sidebar ul li:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.sidebar ul ul {
+  padding-left: 15px; /* Uvučeno za podstavke */
+  margin-top: 10px;
+}
+
+.sidebar ul ul li {
+  background-color: #7156b0; /* Boja za stavke menija */
+
+}
+
+.sidebar ul ul li:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+/* Tekst unutar stavki */
+.sidebar ul li {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.sidebar ul ul li {
+  font-size: 14px; /* Manji tekst za podstavke */
+}

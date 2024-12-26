@@ -7,6 +7,7 @@ import { AllUsersComponent } from './auth/all-users/all-users.component';
 import { ProfileComponent } from './user/profile/profile.component';
 import { TrendsComponent } from './user/trends/trends.component';
 import { AdminHomepageComponent } from './auth/admin-homepage/admin-homepage.component';
+import { AdminAnalyticsComponent } from './auth/admin-analytics/admin-analytics.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -18,5 +19,6 @@ export const routes: Routes = [
   { path: 'all-users', component: AllUsersComponent},
   { path: 'profile/:id', component: ProfileComponent},
   { path: 'trends', component: TrendsComponent},
-  { path: 'admin-homepage', component: AdminHomepageComponent}
+  { path: 'admin-homepage', component: AdminHomepageComponent},
+  { path: 'analytics', component: AdminAnalyticsComponent}
 ];

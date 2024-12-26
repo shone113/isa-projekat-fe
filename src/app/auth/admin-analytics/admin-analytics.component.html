@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="sidebar">
+    <ul>
+      <li (click)="showCommentsOptions()">Comments</li>
+      <ul *ngIf="commentsOptions">
+        <li (click)="selectGraph('weekly')">Weekly graph</li>
+        <li (click)="selectGraph('monthly')">Monthly graph</li>
+        <li (click)="selectGraph('yearly')">Yearly graph</li>
+      </ul>
+
+      <li (click)="showPostsOptions()">Posts</li>
+      <ul *ngIf="postsOptions">
+        <li (click)="selectGraph('weekly')">Weekly graph</li>
+        <li (click)="selectGraph('monthly')">Monthly graph</li>
+        <li (click)="selectGraph('yearly')">Yearly graph</li>
+      </ul>
+
+      <li (click)="showUsersOptions()">Users</li>
+      <ul *ngIf="usersOptions">
+        <li (click)="selectGraph('weekly')">Made posts</li>
+        <li (click)="selectGraph('monthly')">Made comments only</li>
+        <li (click)="selectGraph('yearly')">Neither posts nor comments</li>
+      </ul>
+    </ul>
+  </div>
+</div>
