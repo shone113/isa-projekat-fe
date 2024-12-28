@@ -3,24 +3,33 @@
     <ul>
       <li (click)="showCommentsOptions()">Comments</li>
       <ul *ngIf="commentsOptions">
-        <li (click)="selectGraph('weekly')">Weekly graph</li>
-        <li (click)="selectGraph('monthly')">Monthly graph</li>
-        <li (click)="selectGraph('yearly')">Yearly graph</li>
+        <li (click)="selectGraph('comments', 'weekly')">Weekly graph</li>
+        <li (click)="selectGraph('comments', 'monthly')">Monthly graph</li>
+        <li (click)="selectGraph('comments', 'yearly')">Yearly graph</li>
       </ul>
 
       <li (click)="showPostsOptions()">Posts</li>
       <ul *ngIf="postsOptions">
-        <li (click)="selectGraph('weekly')">Weekly graph</li>
-        <li (click)="selectGraph('monthly')">Monthly graph</li>
-        <li (click)="selectGraph('yearly')">Yearly graph</li>
+        <li (click)="selectGraph('posts', 'weekly')">Weekly graph</li>
+        <li (click)="selectGraph('posts', 'monthly')">Monthly graph</li>
+        <li (click)="selectGraph('posts', 'yearly')">Yearly graph</li>
       </ul>
 
       <li (click)="showUsersOptions()">Users</li>
       <ul *ngIf="usersOptions">
-        <li (click)="selectGraph('weekly')">Made posts</li>
-        <li (click)="selectGraph('monthly')">Made comments only</li>
-        <li (click)="selectGraph('yearly')">Neither posts nor comments</li>
+        <li (click)="selectRadialGraph('posts')">Made posts</li>
+        <li (click)="selectRadialGraph('comments')">Made comments only</li>
+        <li (click)="selectRadialGraph('no-posts-or-comments')">Neither posts nor comments</li>
       </ul>
     </ul>
   </div>
+
+  <div *ngIf="radialChart" class="chart-container">
+    <app-radial-chart [graphType]="radialGraphType"></app-radial-chart>
+  </div>
+
+  <div *ngIf="splineChart" class="chart-container">
+    <app-spline-chart [section]="selectedSection" [timeSpan]="selectedTimeSpan"></app-spline-chart>
+  </div>
+
 </div>

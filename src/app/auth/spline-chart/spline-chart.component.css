@@ -6,8 +6,7 @@ canvas {
   width: 80%;
   margin: auto;
 }
-#radialChart{
-  width: 60%;
-  height: 60%;
-  margin: auto;
+#spline{
+  width: 100%;
+  height: 100%;
 }

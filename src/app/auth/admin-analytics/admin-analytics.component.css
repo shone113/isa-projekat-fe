@@ -59,3 +59,7 @@
 .sidebar ul ul li {
   font-size: 14px; /* Manji tekst za podstavke */
 }
+.chart-container{
+  width: 100%;
+}
+

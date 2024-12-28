@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Input, Output } from '@angular/core';
 import { EventEmitter } from '@angular/core';
+import { jwtDecode } from 'jwt-decode';
+
 @Component({
   selector: 'app-comment-form',
   standalone: true,
@@ -20,6 +22,7 @@ export class CommentFormComponent implements OnInit, OnChanges {
   @Input() postId!: number;
   @Output() reloadComments = new EventEmitter<Comment>();
   newCommentContent: string = '';
+  decodedToken: any;
 
   constructor(private router: Router, private http: HttpClient){}
 
@@ -31,15 +34,22 @@ export class CommentFormComponent implements OnInit, OnChanges {
   }
 
   submitComment(): void{
-    const commentDTO = {
-      content: this.newCommentContent,
-      postId: this.postId,
-      creatorId: 1
-    };
-    const token = localStorage.getItem('jwt');
+
+    const token = localStorage.getItem('jwt') || '';
+    this.decodedToken = jwtDecode(token);
     const headers = new HttpHeaders({
       'Authorization': token ? `Bearer ${token}` : ''
     });
+    const profileId = this.decodedToken['userId']
+
+    const commentDTO = {
+      content: this.newCommentContent,
+      postId: this.postId,
+      creatorId: profileId
+    };
+
+    console.log("PROFILE IDDDDDDD: ", profileId);
+
     this.http.post<Comment>('http://localhost:8080/api/comment', commentDTO,{headers}).subscribe({
       next: (response) => {
         console.log('Komentar uspešno kreiran:', response);
