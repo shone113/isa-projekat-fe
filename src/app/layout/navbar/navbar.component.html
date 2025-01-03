@@ -5,6 +5,7 @@
         <button (click)="home()">Home</button>
         <button *ngIf="getToken() !== null" (click)="trends()">Trends</button>
         <button *ngIf="getToken() !== null" (click)="allUsers()">All Users</button>
+        <button *ngIf="getToken() !== null" (click)="messages()">Messages</button>
         <!-- <button *ngIf="getToken() !== null && loggledUserRole == 'ROLE_ADMIN'" (click)="allUsers()">All Users</button> -->
         <button *ngIf="getToken() !== null" (click)="profile()">Profile</button>
         <button *ngIf="getToken() === null" (click)="login()">Login</button>

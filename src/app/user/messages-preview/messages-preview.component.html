@@ -1,0 +1,72 @@
+<div class="container">
+  <!-- Left Sidebar -->
+  <div class="sidebar left-sidebar">
+    <div class="heading-div">
+      <span class="heading">Messages</span>
+      <i class="fas fa-edit edit-icon" (click)="createChat()"></i>
+    </div>
+    <ul class="nav-links">
+      <li>
+        <a href="/home">
+          <i class="icon-home"></i> Home
+        </a>
+      </li>
+      <li>
+        <a href="/search">
+          <i class="icon-search"></i> Search
+        </a>
+      </li>
+      <li>
+        <a href="/notifications">
+          <i class="icon-notifications"></i> Notifications
+        </a>
+      </li>
+      <li>
+        <a href="/profile">
+          <i class="icon-user"></i> Profile
+        </a>
+      </li>
+    </ul>
+    <div class="footer">
+      <a href="/settings">
+        <i class="icon-settings"></i> Settings
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Content (Chat) -->
+  <div class="main-content">
+    <app-messages-chat></app-messages-chat>
+  </div>
+
+  <!-- Right Sidebar -->
+  <div class="sidebar right-sidebar">
+    <div class="heading-div">
+      <span class="heading">Chat Members</span>
+      <button>Change group name</button>
+    </div>
+    <ul class="nav-links">
+      <li>
+        <i class="icon-user">
+          <img class="profile-img" src="https://upload.wikimedia.org/wikipedia/en/8/80/KK_Partizan_logo.svg" alt="Member 1">
+        </i>
+        Member 1
+        <input type="checkbox" class="round-checkbox">
+      </li>
+      <li>
+        <i class="icon-user">
+          <img class="profile-img" src="https://upload.wikimedia.org/wikipedia/en/8/80/KK_Partizan_logo.svg" alt="Member 1">
+        </i>
+        Member 1
+        <input type="checkbox" class="round-checkbox">
+      </li>
+      <li>
+        <i class="icon-user">
+          <img class="profile-img" src="https://upload.wikimedia.org/wikipedia/en/8/80/KK_Partizan_logo.svg" alt="Member 1">
+        </i>
+        Member 1
+        <p class="admin">Admin</p>
+      </li>
+    </ul>
+  </div>
+</div>

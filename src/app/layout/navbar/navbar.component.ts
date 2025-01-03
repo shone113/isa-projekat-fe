@@ -50,6 +50,9 @@ export class NavbarComponent {
   trends(){
     this.router.navigate(["trends"]);
   }
+  messages(){
+    this.router.navigate(["messages"]);
+  }
   profile(){
     this.router.navigate(["profile", this.decodedToken['profileId']]);
   }

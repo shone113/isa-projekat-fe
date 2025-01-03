@@ -1,0 +1,26 @@
+.message-container {
+  display: flex; /* Postavi roditelja kao flex container */
+  flex-direction: column; /* Vertikalno poravnanje, tako da su poredani jedan ispod drugog */
+  width: 500px; /* Možeš prilagoditi širinu po potrebi */
+  padding: 10px; /* Razmak unutar kontejnera */
+  border-radius: 10px; /* Zaobljeni ivici */
+}
+
+.text {
+  font-weight: bold; /* Pojačaj ime korisnika */
+  margin-bottom: 5px; /* Razmak između imena i poruke */
+}
+
+.message {
+  background-color: #f0f0f0; /* Pozadina za poruku */
+  padding: 10px;
+  border-radius: 10px; /* Zaobljeni ivici poruke */
+  margin-bottom: 5px; /* Razmak između poruke i vremena */
+}
+
+.time {
+  align-self: flex-end; /* Pomeri element sa vremenom na desnu stranu */
+  font-size: 0.9rem; /* Manja veličina za vreme */
+  color: #888; /* Siva boja za vreme */
+  margin: 0;
+}
