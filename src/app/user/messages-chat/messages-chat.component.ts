@@ -3,6 +3,9 @@ import { SingleMessageComponent } from '../single-message/single-message.compone
 import { Message } from '../models/message.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import "../../init";
 
 import Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
@@ -11,7 +14,8 @@ import SockJS from 'sockjs-client';
   selector: 'app-messages-chat',
   standalone: true,
   imports: [
-    SingleMessageComponent
+    SingleMessageComponent,
+    FormsModule
   ],
   templateUrl: './messages-chat.component.html',
   styleUrl: './messages-chat.component.css'
@@ -27,14 +31,14 @@ export class MessagesChatComponent {
   isCustomSocketOpened = false;
   messages: Message[] = [];
   decodedToken: any;
+  inputContent: string = '';
 
   constructor(private http: HttpClient){}
 
   ngOnInit(){
-    this.sendMessageUsingRest();
+    //this.sendMessageUsingRest();
 
     this.initializeWebSocketConnection();
-    this.sendMessageUsingSocket();
   }
 
   sendMessageUsingRest() {
@@ -64,27 +68,33 @@ export class MessagesChatComponent {
 
   initializeWebSocketConnection() {
     // serverUrl je vrednost koju smo definisali u registerStompEndpoints() metodi na serveru
-    // let ws = new SockJS(this.serverUrl);
-    // this.stompClient = Stomp.over(ws);
-    // let that = this;
+    // const SockJS = require('sockjs-client');
+    let ws = new SockJS(this.serverUrl);
+    this.stompClient = Stomp.over(ws);
 
-    // this.stompClient.connect({}, function () {
-    //   that.isLoaded = true;
-    //   that.openGlobalSocket()
-    // });
+    this.stompClient.connect({}, () => {
+      console.log("ULAZIM OVDE");
+      this.isLoaded = true;
+      console.log("SAD JE NA TRUE: ", this.isLoaded);
+      this.openGlobalSocket()
+    });
   }
 
   openGlobalSocket() {
     if (this.isLoaded) {
       this.stompClient.subscribe("/socket-publisher", (message: { body: string; }) => {
         // this.handleResult(message);
-        console.log("Socket poruka", message);
+        console.log("Socket poruka", JSON.parse(message.body));
+        this.handleResult(message);
+        // this.sendMessageUsingSocket();
       });
+    }else{
+      console.log("isLoaded je false, pretplata nije moguća.");
     }
-    console.log("IsLoaded: ", this.isLoaded)
   }
 
-  sendMessageUsingSocket() {
+  sendMessageUsingSocket(event: Event) {
+    event.preventDefault(); // Sprečava ponovno učitavanje stranice
     // if (this.form.valid) {
     //   let message: Message = {
     //     message: this.form.value.message,
@@ -98,24 +108,21 @@ export class MessagesChatComponent {
     });
 
     const message = {
-      message: 'hello world using socket',
+      message: this.inputContent,
       fromId: '1',
       toId: '2'
     }
-    this.stompClient.send(`http://localhost:8080/socket-subscriber/send/message`, JSON.stringify(message), {headers}).subscribe({
-      next: (res: Message) => {
-        console.log("Povratna vrednost: ", res);
-      }
-    })
+    // this.stompClient.send("/socket-subscriber/send/message", {headers}, JSON.stringify(message));
+    this.stompClient.send("/socket-publisher", {headers}, JSON.stringify(message));
 
-      // Primer slanja poruke preko web socketa sa klijenta. URL je
-      //  - ApplicationDestinationPrefix definisan u config klasi na serveru (configureMessageBroker() metoda) : /socket-subscriber
-      //  - vrednost @MessageMapping anotacije iz kontrolera na serveru : /send/message
-      // this.stompClient.send("/socket-subscriber/send/message", {}, JSON.stringify(message));
+    this.inputContent = '';
+  }
 
-      // post(data: Message) {
-      //   return this.http.post<Message>(this.url, data)
-      //     .pipe(map((data: Message) => { return data; }));
-      // }
+  handleResult(message: { body: string; }) {
+    if (message.body) {
+      console.log("DESIO SE HANDLE");
+      let messageResult: Message = JSON.parse(message.body);
+      this.messages.push(messageResult);
+    }
   }
 }

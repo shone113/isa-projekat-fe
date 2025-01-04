@@ -1,8 +1,12 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path'; // Za rad sa putanjama
 
+
 // Vite konfiguracija za Angular
 export default defineConfig({
+  optimizeDeps: {
+    include: ['sockjs-client'],
+  },
   resolve: {
     alias: [
       // Definišemo alias za src direktorijum
