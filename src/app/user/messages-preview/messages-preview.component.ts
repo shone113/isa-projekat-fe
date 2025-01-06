@@ -189,6 +189,16 @@ export class MessagesPreviewComponent {
           console.log("Member added: ", response);
           // const foundMember = this.selectedChat?.members.find(member => member?.id === profile.id);
           // foundMember!.chatMember = true;
+          const chatIndex = this.chats.findIndex(chat => chat.id === response.id);
+
+          if (chatIndex !== -1) {
+            this.chats[chatIndex] = response; // Zamenjujemo postojeći chat sa novim
+          } else {
+            this.chats.push(response); // Ako chat ne postoji, dodajemo ga kao novi
+          }
+          this.chats = [...this.chats]; // Kreiranje nove reference
+
+          this.onChatClick(response);
         }
       })
     }else{
@@ -198,6 +208,16 @@ export class MessagesPreviewComponent {
           console.log("Member removed: ", response);
           // const foundMember = this.selectedChat?.members.find(member => member?.id === profile.id);
           // foundMember!.chatMember = false;
+          const chatIndex = this.chats.findIndex(chat => chat.id === response.id);
+
+          if (chatIndex !== -1) {
+            this.chats[chatIndex] = response; // Zamenjujemo postojeći chat sa novim
+          } else {
+            this.chats.push(response); // Ako chat ne postoji, dodajemo ga kao novi
+          }
+          this.chats = [...this.chats]; // Kreiranje nove reference
+
+          this.onChatClick(response);
         }
       })
     }
