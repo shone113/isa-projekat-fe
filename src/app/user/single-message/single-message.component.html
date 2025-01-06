@@ -1,7 +1,7 @@
 <div class="message-container">
-  <p class="text">Marko Markovic</p>
+  <p class="text">{{message.creatorName}} {{message.creatorSurname}}</p>
   <div class="message">
-    <p>This is a sample message that will dynamically adjust its size based on the content inside it.</p>
+    <p>{{message.content}}</p>
   </div>
-  <p class="time">17:00</p>
+  <p class="time">{{message.creationDate}}</p>
 </div>

@@ -6,5 +6,6 @@ export interface Profile{
     user?: User,
     posts: Post[],
     followers?: number[],
-    following?: number[]
+    following?: number[],
+    chatMember?: boolean
 }

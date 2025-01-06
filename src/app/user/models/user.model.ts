@@ -5,7 +5,7 @@ export interface User{
     email: string,
     password: string,
     // address: string
-    role: number,
+    role?: number,
     followers: number,
     followersCount?: number,
     followingCount: number

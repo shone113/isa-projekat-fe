@@ -3,28 +3,12 @@
   <div class="sidebar left-sidebar">
     <div class="heading-div">
       <span class="heading">Messages</span>
-      <i class="fas fa-edit edit-icon" (click)="createChat()"></i>
+      <i class="fas fa-edit edit-icon" (click)="openChatModal()"></i>
     </div>
     <ul class="nav-links">
-      <li>
-        <a href="/home">
-          <i class="icon-home"></i> Home
-        </a>
-      </li>
-      <li>
-        <a href="/search">
-          <i class="icon-search"></i> Search
-        </a>
-      </li>
-      <li>
-        <a href="/notifications">
-          <i class="icon-notifications"></i> Notifications
-        </a>
-      </li>
-      <li>
-        <a href="/profile">
-          <i class="icon-user"></i> Profile
-        </a>
+      <li *ngFor="let chat of chats" (click)="onChatClick(chat)">
+        <i class="fas fa-users icon-chat"></i>
+         <span class="title">{{ chat.title }}</span>
       </li>
     </ul>
     <div class="footer">
@@ -43,17 +27,27 @@
   <div class="sidebar right-sidebar">
     <div class="heading-div">
       <span class="heading">Chat Members</span>
-      <button>Change group name</button>
+      <button class="message-button">Change group name</button>
     </div>
-    <ul class="nav-links">
-      <li>
+    <ul class="nav-links" *ngIf="selectedChat">
+      <!-- <li *ngFor="let member of selectedChat.members"> -->
+      <li *ngFor="let member of chatProfiles">
         <i class="icon-user">
           <img class="profile-img" src="https://upload.wikimedia.org/wikipedia/en/8/80/KK_Partizan_logo.svg" alt="Member 1">
         </i>
-        Member 1
-        <input type="checkbox" class="round-checkbox">
+        <span *ngIf="member">{{ member.user?.name || 'Unknown' }} {{ member.user?.surname || 'Unknown'}} </span>
+        <input
+          *ngIf="member.id !== loggedUserProfile!.id"
+          type="checkbox"
+          class="round-checkbox"
+          [(ngModel)]="member.chatMember"
+          (change)="addRemoveMember(member, $event)" />
+
+          <p *ngIf="member.id == loggedUserProfile!.id" class="admin">Admin</p>
+
       </li>
-      <li>
+
+      <!-- <li>
         <i class="icon-user">
           <img class="profile-img" src="https://upload.wikimedia.org/wikipedia/en/8/80/KK_Partizan_logo.svg" alt="Member 1">
         </i>
@@ -66,7 +60,29 @@
         </i>
         Member 1
         <p class="admin">Admin</p>
-      </li>
+      </li> -->
     </ul>
   </div>
+
+  <div class="modal" *ngIf="showProfiles" (click)="closeModal()">
+    <div class="follow-content" (click)="$event.stopPropagation()">
+      <input type="text" class="title-input" [(ngModel)]="title"/>
+      <span class="close" (click)="closeModal()">&times;</span>
+      <div *ngIf="profiles.length !== 0">
+          <div class="follower_list" *ngFor="let profile of profiles">
+              <img src="https://www.vijesti.me/data/images/2021/07/08/11/5346463_1424218_ls.jpg" alt="Slika">
+              <h2>{{profile.user?.email}}</h2>
+
+              <input
+                type="checkbox"
+                class="round-checkbox"
+                [(ngModel)]="profile.chatMember"
+                (change)="onChatMemberChange(profile, $event)" />
+          </div>
+      </div>
+      <h2 *ngIf="profiles.length === 0">This section is empty</h2>
+      <button class="message-button group-btn" (click)="createChat()">Create group</button>
+  </div>
+</div>
+
 </div>

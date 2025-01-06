@@ -1,4 +1,8 @@
 <h1>Radi alooo</h1>
   <textarea [(ngModel)]="inputContent" placeholder="Unesite poruku"></textarea>
-  <button type="button" (click)="sendMessageUsingSocket($event)">Send message using Socket</button>
-<app-single-message></app-single-message>
+  <!-- <button type="button">Send message using Socket</button> -->
+  <i class="fas fa-paper-plane send-icon" (click)="sendMessageUsingSocket($event)"></i>
+
+<div *ngFor="let message of messages">
+  <app-single-message [message]="message"></app-single-message>
+</div>

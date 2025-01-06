@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-
+import { Component, Input } from '@angular/core';
+import { Message } from '../models/message.model';
 @Component({
   selector: 'app-single-message',
   standalone: true,
@@ -8,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './single-message.component.css'
 })
 export class SingleMessageComponent {
+  @Input() message!: Message;
 
 }

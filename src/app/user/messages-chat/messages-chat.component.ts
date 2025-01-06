@@ -5,17 +5,20 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common'; // Importuj CommonModule
 import "../../init";
 
 import Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
+import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-messages-chat',
   standalone: true,
   imports: [
     SingleMessageComponent,
-    FormsModule
+    FormsModule,
+    CommonModule
   ],
   templateUrl: './messages-chat.component.html',
   styleUrl: './messages-chat.component.css'
@@ -32,6 +35,8 @@ export class MessagesChatComponent {
   messages: Message[] = [];
   decodedToken: any;
   inputContent: string = '';
+  token: string = '';
+  user?: User;
 
   constructor(private http: HttpClient){}
 
@@ -39,6 +44,20 @@ export class MessagesChatComponent {
     //this.sendMessageUsingRest();
 
     this.initializeWebSocketConnection();
+
+    const token = localStorage.getItem('jwt') || '';
+    this.decodedToken = jwtDecode(token);
+    const headers = new HttpHeaders({
+      'Authorization': token ? `Bearer ${token}` : ''
+    });
+
+    // this.http.get<User>(`http://localhost:8080/api/user/${this.decodedToken['userId']}`, {headers}).subscribe({
+    //   next: (response) =>{
+    //     this.user = response;
+    //     console.log("USER: ", this.user);
+    //   }
+    // })
+
   }
 
   sendMessageUsingRest() {
@@ -54,7 +73,7 @@ export class MessagesChatComponent {
       toId: '2'
     }
     const token = localStorage.getItem('jwt') || '';
-      this.decodedToken = jwtDecode(token);
+    this.decodedToken = jwtDecode(token);
       const headers = new HttpHeaders({
         'Authorization': token ? `Bearer ${token}` : ''
       });
@@ -73,7 +92,6 @@ export class MessagesChatComponent {
     this.stompClient = Stomp.over(ws);
 
     this.stompClient.connect({}, () => {
-      console.log("ULAZIM OVDE");
       this.isLoaded = true;
       console.log("SAD JE NA TRUE: ", this.isLoaded);
       this.openGlobalSocket()
@@ -106,14 +124,21 @@ export class MessagesChatComponent {
     const headers = new HttpHeaders({
       'Authorization': token ? `Bearer ${token}` : ''
     });
+    console.log("TOKEN: ", this.decodedToken);
 
     const message = {
-      message: this.inputContent,
+      content: this.inputContent,
       fromId: '1',
-      toId: '2'
+      toId: '2',
+      creatorName: this.user?.name,
+      creatorSurname: this.user?.surname,
+      creationTime: new Date().toISOString()
     }
     // this.stompClient.send("/socket-subscriber/send/message", {headers}, JSON.stringify(message));
-    this.stompClient.send("/socket-publisher", {headers}, JSON.stringify(message));
+    if(message.content.length !== 0){
+      this.stompClient.send("/socket-publisher", {headers}, JSON.stringify(message));
+
+    }
 
     this.inputContent = '';
   }
