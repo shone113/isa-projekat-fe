@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { SingleMessageComponent } from '../single-message/single-message.component';
 import { Message } from '../models/message.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -37,6 +37,9 @@ export class MessagesChatComponent {
   inputContent: string = '';
   token: string = '';
   user?: User;
+  loggedProfileId?: number;
+  @Input() title!: string;
+  @Input() chatId!: number;
 
   constructor(private http: HttpClient){}
 
@@ -51,36 +54,52 @@ export class MessagesChatComponent {
       'Authorization': token ? `Bearer ${token}` : ''
     });
 
-    // this.http.get<User>(`http://localhost:8080/api/user/${this.decodedToken['userId']}`, {headers}).subscribe({
-    //   next: (response) =>{
-    //     this.user = response;
-    //     console.log("USER: ", this.user);
-    //   }
-    // })
+    this.loggedProfileId = this.decodedToken['profileId'];
 
+    this.http.get<User>(`http://localhost:8080/api/user/${this.decodedToken['userId']}`, {headers}).subscribe({
+      next: (response) =>{
+        this.user = response;
+        console.log("USER: ", this.user);
+      }
+    })
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['title'] || changes['chatId']) {
+      // Reagujte na promenu
+      this.onChatSelected(this.chatId);
+      console.log("OVO JE ON CHANGES    ", this.chatId, "   !!!!!!!!!!!!");
+    }
   }
 
-  sendMessageUsingRest() {
-    // if (this.form.valid) {
-    //   let message: Message = {
-    //     message: this.form.value.message,
-    //     fromId: this.userForm.value.fromId,
-    //     toId: this.form.value.toId
-    //   };
-    const message = {
-      message: 'hello world',
-      fromId: '1',
-      toId: '2'
-    }
+
+  onChatSelected(chatId: number): void {
+    const token = localStorage.getItem('jwt') || '';
+    this.decodedToken = jwtDecode(token);
+    const headers = new HttpHeaders({
+      'Authorization': token ? `Bearer ${token}` : ''
+    });
+
+    this.http.get<Message[]>(`http://localhost:8080/api/message/${this.chatId}`, {headers}).subscribe({
+      next: (response) => {
+        this.messages = response;
+        console.log("UCITAVAM PORUKE ZA ID ", this.chatId, ": ", response);
+      }
+    })
+  }
+
+
+  sendMessageUsingRest(message: Message) {
+
     const token = localStorage.getItem('jwt') || '';
     this.decodedToken = jwtDecode(token);
       const headers = new HttpHeaders({
         'Authorization': token ? `Bearer ${token}` : ''
       });
 
-      this.http.post<Message>(`http://localhost:8080/sendMessageRest`, message, {headers}).subscribe({
+      console.log("REST MESSAGE BEFORE SENDING: ", message);
+      this.http.post<Message>(`http://localhost:8080/api/message`, message, {headers}).subscribe({
         next: (res: Message) => {
-          console.log("Povratna vrednost: ", res);
+          console.log("Povratna vrednost REST : ", res);
         }
       })
   }
@@ -111,6 +130,14 @@ export class MessagesChatComponent {
     }
   }
 
+  handleResult(message: { body: string; }) {
+    if (message.body) {
+      let messageResult: Message = JSON.parse(message.body);
+      console.log("DESIO SE HANDLE", messageResult);
+      this.messages.push(messageResult);
+    }
+  }
+
   sendMessageUsingSocket(event: Event) {
     event.preventDefault(); // Sprečava ponovno učitavanje stranice
     // if (this.form.valid) {
@@ -127,27 +154,22 @@ export class MessagesChatComponent {
     console.log("TOKEN: ", this.decodedToken);
 
     const message = {
+      chatId: this.chatId,
       content: this.inputContent,
-      fromId: '1',
-      toId: '2',
-      creatorName: this.user?.name,
-      creatorSurname: this.user?.surname,
+      creatorId: this.decodedToken['profileId'],
+      creatorName: this.user!.name,
+      creatorSurname: this.user!.surname,
       creationTime: new Date().toISOString()
     }
     // this.stompClient.send("/socket-subscriber/send/message", {headers}, JSON.stringify(message));
     if(message.content.length !== 0){
+      console.log("PORUKA PRE SLANJA: ", JSON.stringify(message));
       this.stompClient.send("/socket-publisher", {headers}, JSON.stringify(message));
-
+      this.sendMessageUsingRest(message);
     }
 
     this.inputContent = '';
   }
 
-  handleResult(message: { body: string; }) {
-    if (message.body) {
-      console.log("DESIO SE HANDLE");
-      let messageResult: Message = JSON.parse(message.body);
-      this.messages.push(messageResult);
-    }
-  }
+
 }

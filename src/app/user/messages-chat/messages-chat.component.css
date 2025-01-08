@@ -7,3 +7,61 @@
   padding: 7px 10px 7px 7px;
 
 }
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 95vh; /* Visina celog prozora */
+}
+
+.messages-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Preuzima sav prostor između naslova i unosa poruke */
+  overflow-y: auto; /* Dodaje skrol ako ima previše poruka */
+  padding: 10px; /* Razmak između poruka i ivica */
+  background-color: #f9f9f9; /* Opcioni stil pozadine */
+  border: 1px solid #ccc; /* Opcioni stil ivice */
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #fff; /* Opcioni stil pozadine */
+  border-top: 1px solid #ccc; /* Linija između poruka i unosa */
+}
+
+textarea {
+  flex: 1;
+  margin-right: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: none; /* Sprečava promenu veličine tekstualnog polja */
+}
+
+.send-icon {
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.send-icon:hover {
+  color: #0056b3;
+}
+.messages-container .sent {
+  align-self: flex-end; /* Poruke korisnika idu desno */
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 70%; /* Ograničava širinu poruka */
+  word-wrap: break-word; /* Razbija duge reči */
+  text-align: right;
+}
+
+.messages-container .received {
+  align-self: flex-start; /* Poruke drugih idu levo */
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 70%;
+  word-wrap: break-word;
+}

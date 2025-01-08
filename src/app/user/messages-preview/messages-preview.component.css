@@ -55,6 +55,7 @@
   list-style-type: none;
   padding: 0;
   flex-grow: 1;
+  cursor: pointer;
 }
 
 .nav-links li {
@@ -117,6 +118,9 @@
 .heading-div button:hover {
   background-color: #0056b3; /* Tamnija zelena pozadina pri hover-u */
 }
+.nav-links{
+  margin: 0;
+}
 .nav-links li {
   display: flex;
   justify-content: space-between;
@@ -142,6 +146,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.dm-chat{
+
 }
 
 .round-checkbox {
@@ -289,4 +297,17 @@
   border-radius: 10px;
   font-size: 20px;
   padding: 5px 0 5px 5px;
+}
+.enabled-input{
+  cursor: pointer; /* Promena kursora */
+  background-color: green;
+}
+.disabled-input{
+  background-color: #f1f1f1; /* Sivo za onemogućeni input */
+  cursor: not-allowed; /* Kursor za disabled */
+  background-color: red;
+  pointer-events:none;
+}
+.li-chat{
+  cursor: pointer;
 }

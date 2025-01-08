@@ -1,8 +1,8 @@
 export interface Message {
   content: string,
-  fromId: string,
-  toId: string,
-  creationDate: string;
+  creatorId: number,
+  creatorUserId?: number,
+  creationTime: string;
   chatId: number;
   creatorName: string;
   creatorSurname: string;

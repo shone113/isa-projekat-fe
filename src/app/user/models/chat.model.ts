@@ -4,5 +4,6 @@ export interface Chat {
   id?: number,
   title: string,
   members: Profile[],
-  adminProfileId?: number
+  adminProfileId?: number,
+  chatType: string
 }

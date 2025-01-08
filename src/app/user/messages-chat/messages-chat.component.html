@@ -1,8 +1,16 @@
-<h1>Radi alooo</h1>
-  <textarea [(ngModel)]="inputContent" placeholder="Unesite poruku"></textarea>
-  <!-- <button type="button">Send message using Socket</button> -->
-  <i class="fas fa-paper-plane send-icon" (click)="sendMessageUsingSocket($event)"></i>
+<div class="chat-container">
+  <h1>{{ title }}</h1>
 
-<div *ngFor="let message of messages">
-  <app-single-message [message]="message"></app-single-message>
+  <div class="messages-container">
+    <div *ngFor="let message of messages"
+        [ngClass]="message.creatorId == loggedProfileId ? 'sent' : 'received'">
+      <app-single-message [message]="message"></app-single-message>
+    </div>
+  </div>
+
+  <div class="input-container">
+    <textarea [(ngModel)]="inputContent" placeholder="Unesite poruku"></textarea>
+    <i class="fas fa-paper-plane send-icon" (click)="sendMessageUsingSocket($event)"></i>
+  </div>
+
 </div>

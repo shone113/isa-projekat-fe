@@ -3,5 +3,5 @@
   <div class="message">
     <p>{{message.content}}</p>
   </div>
-  <p class="time">{{message.creationDate}}</p>
+  <p class="time">{{ message.creationTime | date: 'dd-MM-yyyy  HH:mm' }}</p>
 </div>

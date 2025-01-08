@@ -11,6 +11,14 @@
          <span class="title">{{ chat.title }}</span>
       </li>
     </ul>
+    <ul class="nav-links dm-chats">
+      <li *ngFor="let profile of profiles" (click)="onDmClick(profile)">
+        <i class="icon-chat">
+          <img class="profile-img" src="https://cdn.mos.cms.futurecdn.net/6qthjkVdbYkToB7upxRSkU.jpg" alt="Member 1">
+        </i>
+         <span class="title">{{ profile?.user?.name }} {{ profile?.user?.surname }}</span>
+      </li>
+    </ul>
     <div class="footer">
       <a href="/settings">
         <i class="icon-settings"></i> Settings
@@ -20,14 +28,16 @@
 
   <!-- Main Content (Chat) -->
   <div class="main-content">
-    <app-messages-chat></app-messages-chat>
+    <app-messages-chat
+      [title]="clickedChatTitle ?? ' '"
+      [chatId]="selectedChat?.id ?? 0"></app-messages-chat>
   </div>
 
   <!-- Right Sidebar -->
   <div class="sidebar right-sidebar">
     <div class="heading-div">
       <span class="heading">Chat Members</span>
-      <button class="message-button">Change group name</button>
+      <!-- <button class="message-button">Change group name</button> -->
     </div>
     <ul class="nav-links" *ngIf="selectedChat">
       <!-- <li *ngFor="let member of selectedChat.members"> -->
@@ -37,13 +47,14 @@
         </i>
         <span *ngIf="member">{{ member.user?.name || 'Unknown' }} {{ member.user?.surname || 'Unknown'}} </span>
         <input
-          *ngIf="member.id !== loggedUserProfile!.id"
+          *ngIf="member.id !== selectedChat!.adminProfileId"
           type="checkbox"
           class="round-checkbox"
+          [ngClass]="loggedProfileId == selectedChat.adminProfileId ? 'enabled-input' : 'disabled-input'"
           [(ngModel)]="member.chatMember"
           (change)="addRemoveMember(member, $event)" />
 
-          <p *ngIf="member.id == loggedUserProfile!.id" class="admin">Admin</p>
+          <p *ngIf="member.id == selectedChat!.adminProfileId" class="admin">Admin</p>
 
       </li>
 

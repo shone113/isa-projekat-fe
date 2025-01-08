@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, EventEmitter, Output} from '@angular/core';
 import { jwtDecode } from "jwt-decode";
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { User } from '../models/user.model';
@@ -32,6 +32,9 @@ export class MessagesPreviewComponent {
   chatProfiles: Profile[] = [];
   title: string = '';
   loggedUserProfile: Profile | null = null;
+  loggedProfileId?: number;
+  clickedChatTitle: string = '';
+  @Output() chatSelected = new EventEmitter<number>(); // Emituje ID selektovanog četa
 
   constructor(private http: HttpClient){
   }
@@ -43,6 +46,9 @@ export class MessagesPreviewComponent {
     const headers = new HttpHeaders({
       'Authorization': this.token ? `Bearer ${this.token}` : ''
     });
+
+    this.loggedProfileId = this.decodedToken['profileId'];
+    console.log("ULOGOVAN PROFILE: ", this.loggedProfileId);
 
     this.http.get<Profile>(`http://localhost:8080/api/profile/user?id=${this.decodedToken['userId']}`, {headers}).subscribe({
       next: (response) =>{
@@ -67,7 +73,7 @@ export class MessagesPreviewComponent {
         //this.profiles = response;
         this.profiles = response.filter(profile => profile.id !== this.loggedUserProfile?.id);
         this.chatProfiles = response;
-        console.log("Profiles: ", this.chats);
+        console.log("Profiles: ", this.profiles);
       }
     })
   }
@@ -82,7 +88,7 @@ export class MessagesPreviewComponent {
 
     this.http.get<Chat[]>(`http://localhost:8080/api/chat/for-user/${this.loggedUserProfile?.id}`, {headers}).subscribe({
       next: (response) =>{
-        this.chats = response;
+        this.chats = response.filter((chat) => chat.chatType == 'GROUP');
         console.log("CHATS: ", this.chats);
       }
     })
@@ -95,17 +101,9 @@ export class MessagesPreviewComponent {
 
   onChatClick(chat: Chat): void{
     this.selectedChat = chat;
+    this.clickedChatTitle = this.selectedChat.title;
     console.log("SELEKTOVANI CHAT", this.selectedChat);
-
-    // this.chatProfiles.forEach(member => {
-    //   if (member.user) {
-    //     // Proveravamo da li se profileId nalazi u listi članova chata
-    //     if (chat.members.some(chatMember => chatMember.id === member.user!.id)) {
-    //       // Ako se profil nalazi u chat.members, postavljamo chatMember na true
-    //       member.chatMember = true;
-    //     }
-    //   }
-    // });
+    this.chatSelected.emit(chat.id); // Emituje ID selektovanog četa
 
     this.chatProfiles = chat.members.map(member => ({
       ...member,
@@ -123,12 +121,25 @@ export class MessagesPreviewComponent {
         });
       }
     });
-    // chat.members.forEach(member => {
-    //   if (member.user) {
-    //     member.chatMember = true;
-    //     console.log(`Ime: ${member.user.name}, Prezime: ${member.user.surname}`);
-    //   }
-    // });
+
+  }
+
+  onDmClick(profile: Profile): void{
+    this.token = localStorage.getItem("jwt") ? localStorage.getItem("jwt") : '';
+    this.decodedToken =  jwtDecode(this.token);
+
+    const headers = new HttpHeaders({
+      'Authorization': this.token ? `Bearer ${this.token}` : ''
+    });
+
+    this.http.get<Chat>(`http://localhost:8080/api/chat/${this.loggedProfileId}/${profile.id}`, {headers}).subscribe({
+      next: (response) =>{
+        this.selectedChat = response;
+        this.clickedChatTitle = profile.user?.name + ' ' + profile.user?.surname;
+        this.chatSelected.emit(response.id); // Emituje ID selektovanog četa
+
+      }
+    })
   }
 
   closeModal() {
@@ -154,7 +165,8 @@ export class MessagesPreviewComponent {
     const newChat = {
       title: this.title,
       members: chatMembers.map(id => ({ id })), // Mapiramo članove u objekte sa "id"
-      adminProfileId: this.loggedUserProfile?.id
+      adminProfileId: this.decodedToken['profileId'],
+      chatType: 'GROUP'
     }
 
     console.log("OVO JE NOVI CHAT", newChat);
