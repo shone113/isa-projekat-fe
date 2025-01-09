@@ -1,7 +1,7 @@
 <div class="chat-container">
   <h1>{{ title }}</h1>
 
-  <div class="messages-container">
+  <div class="messages-container" #messagesContainer>
     <div *ngFor="let message of messages"
         [ngClass]="message.creatorId == loggedProfileId ? 'sent' : 'received'">
       <app-single-message [message]="message"></app-single-message>

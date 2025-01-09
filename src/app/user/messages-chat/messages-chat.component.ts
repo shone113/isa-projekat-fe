@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
 import { SingleMessageComponent } from '../single-message/single-message.component';
 import { Message } from '../models/message.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -23,7 +23,7 @@ import { User } from '../models/user.model';
   templateUrl: './messages-chat.component.html',
   styleUrl: './messages-chat.component.css'
 })
-export class MessagesChatComponent {
+export class MessagesChatComponent implements AfterViewChecked {
 
   private serverUrl = 'http://localhost:8080/socket'
   private stompClient: any;
@@ -40,8 +40,22 @@ export class MessagesChatComponent {
   loggedProfileId?: number;
   @Input() title!: string;
   @Input() chatId!: number;
+  @ViewChild('messagesContainer') messagesContainer!: ElementRef;
 
   constructor(private http: HttpClient){}
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+
+  scrollToBottom(): void {
+    try {
+      this.messagesContainer.nativeElement.scrollTop = this.messagesContainer.nativeElement.scrollHeight;
+    } catch (err) {
+      console.error('Error scrolling to bottom:', err);
+    }
+  }
 
   ngOnInit(){
     //this.sendMessageUsingRest();
@@ -63,11 +77,13 @@ export class MessagesChatComponent {
       }
     })
   }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['title'] || changes['chatId']) {
       // Reagujte na promenu
       this.onChatSelected(this.chatId);
       console.log("OVO JE ON CHANGES    ", this.chatId, "   !!!!!!!!!!!!");
+      this.openGlobalSocket();
     }
   }
 
@@ -79,7 +95,7 @@ export class MessagesChatComponent {
       'Authorization': token ? `Bearer ${token}` : ''
     });
 
-    this.http.get<Message[]>(`http://localhost:8080/api/message/${this.chatId}`, {headers}).subscribe({
+    this.http.get<Message[]>(`http://localhost:8080/api/message/${this.chatId}/${this.loggedProfileId}`, {headers}).subscribe({
       next: (response) => {
         this.messages = response;
         console.log("UCITAVAM PORUKE ZA ID ", this.chatId, ": ", response);
@@ -119,9 +135,10 @@ export class MessagesChatComponent {
 
   openGlobalSocket() {
     if (this.isLoaded) {
-      this.stompClient.subscribe("/socket-publisher", (message: { body: string; }) => {
+      console.log("Saltam se na: /socket-publisher/", this.chatId);
+      this.stompClient.subscribe("/socket-publisher/" + this.chatId, (message: { body: string; }) => {
         // this.handleResult(message);
-        console.log("Socket poruka", JSON.parse(message.body));
+        // console.log("Socket poruka", JSON.parse(message.body));
         this.handleResult(message);
         // this.sendMessageUsingSocket();
       });
@@ -163,8 +180,9 @@ export class MessagesChatComponent {
     }
     // this.stompClient.send("/socket-subscriber/send/message", {headers}, JSON.stringify(message));
     if(message.content.length !== 0){
-      console.log("PORUKA PRE SLANJA: ", JSON.stringify(message));
-      this.stompClient.send("/socket-publisher", {headers}, JSON.stringify(message));
+      // console.log("PORUKA PRE SLANJA: ", JSON.stringify(message));
+      console.log("Saljem na /socket-publisher/", this.chatId);
+      this.stompClient.send("/socket-publisher/" + this.chatId, {headers}, JSON.stringify(message));
       this.sendMessageUsingRest(message);
     }
 
