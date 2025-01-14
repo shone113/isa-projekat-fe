@@ -44,7 +44,9 @@ export class LoginComponent implements OnInit {
     //address: ''
     role : 0,
     followingCount: 0,
-    followers: 0
+    followers: 0,
+    longitude: 0,
+    latitude: 0
   };
   checkPassword: string = "";
   loginDetails: LoginDetails = {
@@ -81,7 +83,9 @@ export class LoginComponent implements OnInit {
       password: this.registerForm.value.password!,
       role: 0,
       followingCount: 0,
-      followers: 0
+      followers: 0,
+      longitude: 0,
+      latitude: 0
     };
     this.loginErrorMessage = '';
     this.loginDetails.email = '';

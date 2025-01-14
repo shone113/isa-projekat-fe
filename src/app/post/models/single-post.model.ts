@@ -13,6 +13,8 @@ export class Post {
   creatorName: string;
   creatorSurname: string;
   user?: User;
+  longitude: number;
+  latitude: number;
 
   constructor(
     id: number,
@@ -25,7 +27,9 @@ export class Post {
     creatorProfileId: number,
     liked: boolean,
     creatorName: string,
-    creatorSurname: string
+    creatorSurname: string,
+    longitude: number,
+    latitude: number
   ) {
     this.id = id;
     this.image = image;
@@ -38,6 +42,8 @@ export class Post {
     this.liked = liked;
     this.creatorName = creatorName;
     this.creatorSurname = creatorSurname;
+    this.latitude = latitude;
+    this.longitude = longitude;
   }
 }
 
