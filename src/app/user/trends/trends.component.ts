@@ -84,7 +84,7 @@ export class TrendsComponent implements OnInit {
     const range = end - start;
     const stepTime = Math.abs(Math.floor(duration / range));
     let current = start;
-    const increment = end > start ? 1 : -1;
+    const increment = end > start ? 1 : 0;
     const timer = setInterval(() => {
       current += increment;
       callback(current);

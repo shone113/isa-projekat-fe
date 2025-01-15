@@ -60,6 +60,9 @@ export class NavbarComponent {
   login(){
     this.router.navigate(["login"]);
   }
+   map(){
+    this.router.navigate(["map"]);
+   }
 
   getToken(): string|null{
     return localStorage.getItem("jwt")

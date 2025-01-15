@@ -8,5 +8,7 @@ export interface User{
     role?: number,
     followers: number,
     followersCount?: number,
-    followingCount: number
+    followingCount: number,
+    longitude: number,
+    latitude: number
 }
