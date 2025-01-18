@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
     email: '',
     password: '',
     //address: ''
-    role : 0,
+    // role : 0,
     followingCount: 0,
     followers: 0,
     longitude: 0,
@@ -75,9 +75,7 @@ export class LoginComponent implements OnInit {
     return false;
   }
 
-  onRegister() {
-    console.log("lon lat: "+ this.registerForm.value.latitude + this.registerForm.value.longitude)
-    
+  onRegister() {    
     Object.keys(this.registerForm.controls).forEach(field => {
       const control = this.registerForm.get(field);
       if (control) {
@@ -89,7 +87,6 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    console.log("lon lat: "+ this.registerForm.value.latitude + this.registerForm.value.longitude)
 
     const user: User = {
       id: 0,
@@ -97,7 +94,7 @@ export class LoginComponent implements OnInit {
       surname: this.registerForm.value.surname!,
       email: this.registerForm.value.email!,
       password: this.registerForm.value.password!,
-      role: 0,
+      // role: 0,
       followingCount: 0,
       followers: 0,
       longitude: this.registerForm.value.longitude!,
@@ -169,10 +166,14 @@ export class LoginComponent implements OnInit {
     })
   }
 
-  closeModal() {
-    this.addLocation = !this.addLocation;
+  openModal(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.addLocation = true;
   }
-
+  closeModal(){
+    this.addLocation = false;
+  }
   addedLocation(event: { lat: number, lng: number }){
     this.registerForm.patchValue({
       latitude: event.lat,

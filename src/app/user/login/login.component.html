@@ -31,7 +31,7 @@
                   <div *ngIf="registerForm.get('latitude')?.invalid && registerForm.get('latitude')?.touched">
                     <small *ngIf="registerForm.get('latitude')?.errors?.['required']">Latitude is required.</small>
                   </div>  
-                  <button (click)="closeModal()">Address</button>
+                  <button type="button" (click)="openModal($event)">Address</button>
                 </div>
 
                 <input type="password" formControlName="password" placeholder="Password" required>

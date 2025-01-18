@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import * as L from 'leaflet';
 
 @Component({
@@ -11,13 +11,18 @@ export class MapComponent implements OnInit {
   private map: any;
   private currentMarker: L.Marker | null = null;
   @Output() mapClick = new EventEmitter<{ lat: number, lng: number }>();
+  @Input() longitude? : number;
+  @Input() latitude? : number;
 
   ngOnInit(): void {
     this.initMap();
   }
 
   private initMap(): void {
-    this.map = L.map('map').setView([44.7866, 20.4489], 13);
+    if(this.longitude == undefined || this.latitude == undefined)
+      this.map = L.map('map').setView([44.7866, 20.4489], 13);
+    else
+      this.map = L.map('map').setView([this.latitude, this.longitude], 13);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -34,6 +39,9 @@ export class MapComponent implements OnInit {
     });
     
     L.Marker.prototype.options.icon = DefaultIcon;
+
+    if(this.latitude != undefined && this.longitude != undefined)
+      this.addPin(this.latitude, this.longitude);
 
     this.map.on('click', (event: L.LeafletMouseEvent) => {
       const lat = event.latlng.lat; // Latitude

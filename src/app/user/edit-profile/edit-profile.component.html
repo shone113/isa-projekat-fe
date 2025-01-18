@@ -1,0 +1,50 @@
+<div class="edit-container" >
+    <form [formGroup]="editForm" (ngSubmit)="onEdit()">
+        <h1>Edit profile</h1>
+        <br>
+    
+        <input type="text" formControlName="name" placeholder="Name" required>
+        <div *ngIf="editForm.get('name')?.invalid && editForm.get('name')?.touched">
+          <small *ngIf="editForm.get('name')?.errors?.['required']">Name is required.</small>
+        </div>
+    
+        <input type="text" formControlName="surname" placeholder="Surname" required>
+        <div *ngIf="editForm.get('surname')?.invalid && editForm.get('surname')?.touched">
+          <small *ngIf="editForm.get('surname')?.errors?.['required']">Surname is required.</small>
+        </div>
+    
+        <div class="address">
+          <input type="text" formControlName="longitude" placeholder="Longitude" required readonly>
+          <div *ngIf="editForm.get('longitude')?.invalid && editForm.get('longitude')?.touched">
+            <small *ngIf="editForm.get('longitude')?.errors?.['required']">Longitude is required.</small>
+          </div>
+          <input type="text" formControlName="latitude" placeholder="Latitude" required readonly>
+          <div *ngIf="editForm.get('latitude')?.invalid && editForm.get('latitude')?.touched">
+            <small *ngIf="editForm.get('latitude')?.errors?.['required']">Latitude is required.</small>
+          </div>  
+          <button type="button" (click)="openMapModal($event)">Address</button>
+        </div>
+    
+        <input type="password" formControlName="password" placeholder="Password" required>
+        <div *ngIf="editForm.get('password')?.invalid && editForm.get('password')?.touched">
+          <small *ngIf="editForm.get('password')?.errors?.['required']">Password is required.</small>
+          <small *ngIf="editForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters long.</small>
+        </div>
+    
+        <input type="password" formControlName="checkPassword" placeholder="Password again" required>
+        <div *ngIf="editForm.get('checkPassword')?.invalid && editForm.get('checkPassword')?.touched">
+          <small *ngIf="editForm.get('checkPassword')?.errors?.['required']">Please confirm your password.</small>
+          
+        </div>
+        <small *ngIf="passwordMatchValidator()">Passwords do not match.</small> 
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<div class="modal" *ngIf="addLocation" (click)="closeMapModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <span class="close" (click)="closeMapModal()">&times;</span>
+        <app-map [latitude]="user?.latitude" [longitude]="user?.longitude" (mapClick)="addedLocation($event)"></app-map>
+    </div>
+</div>
+

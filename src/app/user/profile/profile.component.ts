@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Profile } from '../models/profile.model';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, ParamMap, Router, RouterModule } from '@angular/router';
@@ -8,11 +8,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 import { Post } from '../../post/models/single-post.model';
+import { EditProfileComponent } from '../edit-profile/edit-profile.component';
+import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, SinglePostComponent, MatIconModule, RouterModule],
+  imports: [CommonModule, SinglePostComponent, MatIconModule, RouterModule, EditProfileComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -27,13 +29,16 @@ export class ProfileComponent implements OnInit {
   decodedToken: any;
   loggedUserProfile: boolean = false;
   followedByLoggedUser: boolean = false;
-  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router){}
+  shouldEdit: boolean = false;
+  showEditButton: boolean = false;
+  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router, private cdr: ChangeDetectorRef){}
 
   ngOnInit(): void {
     var id = this.route.snapshot.paramMap.get('id');
     const token = localStorage.getItem('jwt') || '';
     this.decodedToken = jwtDecode(token); // Koristite `default`
     console.log('Dekodiran token:', this.decodedToken['userId']);
+    this.showEditButton = Number(id) === Number(this.decodedToken['profileId']);
     const headers = new HttpHeaders({
             'Authorization': token ? `Bearer ${token}` : ''
           });
@@ -54,6 +59,7 @@ export class ProfileComponent implements OnInit {
               if (profile.id == this.decodedToken['profileId']) {
                 this.followedByLoggedUser = true;
               }
+              this.profile.user!.followersCount = res.length;
             });
 
             console.log('followedByLoggedUser  *J*J*J*J*J', this.followedByLoggedUser);
@@ -139,4 +145,20 @@ export class ProfileComponent implements OnInit {
     })
   }
 
+  editProfile(){
+    this.shouldEdit = true;
+    this.cdr.detectChanges();
+  }
+
+  profileEdited(event: User){
+    this.profile.user = event;
+    this.profile.user.followersCount = event.followersCount;
+    // this.shouldEdit = false;
+    this.closeEditProfile();
+  }
+
+  closeEditProfile(){
+    this.shouldEdit = false;
+    this.cdr.detectChanges();
+  }
 }
