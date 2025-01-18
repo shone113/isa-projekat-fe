@@ -11,6 +11,7 @@ import { AdminAnalyticsComponent } from './auth/admin-analytics/admin-analytics.
 import { MessagesPreviewComponent } from './user/messages-preview/messages-preview.component';
 import { MapComponent } from './layout/map/map.component';
 import { PostsMapComponent } from './user/posts-map/posts-map.component';
+import { EditProfileComponent } from './user/edit-profile/edit-profile.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -25,5 +26,6 @@ export const routes: Routes = [
   { path: 'admin-homepage', component: AdminHomepageComponent},
   { path: 'analytics', component: AdminAnalyticsComponent},
   { path: 'messages', component: MessagesPreviewComponent},
-  { path: 'map', component: PostsMapComponent}
+  { path: 'map', component: PostsMapComponent},
+  { path: 'edit', component: EditProfileComponent}
 ];

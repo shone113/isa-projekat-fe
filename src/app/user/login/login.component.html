@@ -21,11 +21,19 @@
                   <small *ngIf="registerForm.get('email')?.errors?.['email']">Enter a valid email.</small>
                 </div>
             
-                <input type="text" formControlName="address" placeholder="Address" required>
-                <div *ngIf="registerForm.get('address')?.invalid && registerForm.get('address')?.touched">
-                  <small *ngIf="registerForm.get('address')?.errors?.['required']">Address is required.</small>
+
+                <div class="address">
+                  <input type="text" formControlName="longitude" placeholder="Longitude" required readonly>
+                  <div *ngIf="registerForm.get('longitude')?.invalid && registerForm.get('longitude')?.touched">
+                    <small *ngIf="registerForm.get('longitude')?.errors?.['required']">Longitude is required.</small>
+                  </div>
+                  <input type="text" formControlName="latitude" placeholder="Latitude" required readonly>
+                  <div *ngIf="registerForm.get('latitude')?.invalid && registerForm.get('latitude')?.touched">
+                    <small *ngIf="registerForm.get('latitude')?.errors?.['required']">Latitude is required.</small>
+                  </div>  
+                  <button type="button" (click)="openModal($event)">Address</button>
                 </div>
-            
+
                 <input type="password" formControlName="password" placeholder="Password" required>
                 <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
                   <small *ngIf="registerForm.get('password')?.errors?.['required']">Password is required.</small>
@@ -38,7 +46,7 @@
                   
                 </div>
                 <small *ngIf="passwordMatchValidator()">Passwords do not match.</small> 
-                <button type="submit" [disabled]="registerForm.invalid">Sign Up</button>
+                <button type="submit">Sign Up</button>
             </form>
             <img *ngIf="loading" width="300" style="margin-top: 150px;" src="https://payload.cargocollective.com/1/10/339592/14075299/RabbitRun_final.gif" alt="Registration in progress...">
         </div>
@@ -76,4 +84,12 @@
             </div>
         </div>
     </div>
+</div>
+
+
+<div class="modal" *ngIf="addLocation" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+      <span class="close" (click)="closeModal()">&times;</span>
+      <app-map (mapClick)="addedLocation($event)"></app-map>
+  </div>
 </div>

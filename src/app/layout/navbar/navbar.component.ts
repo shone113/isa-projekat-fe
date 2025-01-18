@@ -54,7 +54,7 @@ export class NavbarComponent {
     this.router.navigate(["messages"]);
   }
   profile(){
-    this.router.navigate(["profile", this.decodedToken['profileId']]);
+    this.router.navigate(["profile", Number(this.decodedToken['profileId'])]);
   }
 
   login(){
@@ -69,6 +69,7 @@ export class NavbarComponent {
   }
 
   logout(){
+    localStorage.removeItem("jwt");
     localStorage.clear();
     this.router.navigate(["login"]);
   }

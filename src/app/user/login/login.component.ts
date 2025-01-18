@@ -9,12 +9,13 @@ import { __values } from 'tslib';
 import { LoginDetails } from '../models/login-details.model';
 import { takeUntil } from 'rxjs';
 import {jwtDecode} from 'jwt-decode';
+import { MapComponent } from '../../layout/map/map.component';
 
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, ReactiveFormsModule, MapComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -24,11 +25,14 @@ export class LoginComponent implements OnInit {
   loading: boolean = false;
   code: string = "";
   loginErrorMessage: string = "";
+  addLocation: boolean = false;
 
   registerForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
     surname: new FormControl('', [Validators.required]),
-    address: new FormControl('', [Validators.required]),
+    // address: new FormControl('', [Validators.required]),
+    longitude: new FormControl(0.0, [Validators.required]),
+    latitude: new FormControl(0.0, [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(6)]),
     checkPassword: new FormControl('', [Validators.required, Validators.minLength(6)])
@@ -42,7 +46,7 @@ export class LoginComponent implements OnInit {
     email: '',
     password: '',
     //address: ''
-    role : 0,
+    // role : 0,
     followingCount: 0,
     followers: 0,
     longitude: 0,
@@ -71,9 +75,18 @@ export class LoginComponent implements OnInit {
     return false;
   }
 
-  onRegister() {
-    if(!this.registerForm.valid || this.passwordMatchValidator())
+  onRegister() {    
+    Object.keys(this.registerForm.controls).forEach(field => {
+      const control = this.registerForm.get(field);
+      if (control) {
+        control.markAsTouched({ onlySelf: true });
+      }
+    });
+
+    if(!this.registerForm.valid || this.passwordMatchValidator() || this.registerForm.value.latitude === 0 || this.registerForm.value.longitude === 0){
       return;
+    }
+
 
     const user: User = {
       id: 0,
@@ -81,11 +94,11 @@ export class LoginComponent implements OnInit {
       surname: this.registerForm.value.surname!,
       email: this.registerForm.value.email!,
       password: this.registerForm.value.password!,
-      role: 0,
+      // role: 0,
       followingCount: 0,
       followers: 0,
-      longitude: 0,
-      latitude: 0
+      longitude: this.registerForm.value.longitude!,
+      latitude: this.registerForm.value.latitude!
     };
     this.loginErrorMessage = '';
     this.loginDetails.email = '';
@@ -153,5 +166,19 @@ export class LoginComponent implements OnInit {
     })
   }
 
+  openModal(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.addLocation = true;
+  }
+  closeModal(){
+    this.addLocation = false;
+  }
+  addedLocation(event: { lat: number, lng: number }){
+    this.registerForm.patchValue({
+      latitude: event.lat,
+      longitude: event.lng
+    })
+  }
 }
 

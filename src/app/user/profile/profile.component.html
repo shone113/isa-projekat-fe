@@ -30,8 +30,7 @@
                 </div>
             </div>
         </div>
-
-        <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="edit"></mat-icon>
+        <mat-icon *ngIf="showEditButton" (click)="editProfile()" fontIcon="edit"></mat-icon>
     </div>
 
    <div class="posts">
@@ -59,4 +58,12 @@
         </div>
     </div>
 
+</div>
+
+
+<div class="edit-modal" [hidden]="!shouldEdit" (click)="closeEditProfile()">
+    <div class="edit-modal-content" (click)="$event.stopPropagation()">
+        <span class="close" (click)="closeEditProfile()">&times;</span>
+        <app-edit-profile [user]="profile.user" (editedUser)="profileEdited($event)"></app-edit-profile>
+    </div>
 </div>
