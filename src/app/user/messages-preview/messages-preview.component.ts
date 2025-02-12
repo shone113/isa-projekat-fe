@@ -127,6 +127,7 @@ export class MessagesPreviewComponent {
   onDmClick(profile: Profile): void{
     this.token = localStorage.getItem("jwt") ? localStorage.getItem("jwt") : '';
     this.decodedToken =  jwtDecode(this.token);
+    this.chatProfiles = [];
 
     const headers = new HttpHeaders({
       'Authorization': this.token ? `Bearer ${this.token}` : ''
@@ -214,6 +215,7 @@ export class MessagesPreviewComponent {
         }
       })
     }else{
+      console.log("ULAZIM U ELSEEE*************");
       //remove member
       this.http.put<Chat>(`http://localhost:8080/api/chat/remove-member/${this.selectedChat?.id}?profileId=${profile.id}`, {headers}).subscribe({
         next: (response) =>{

@@ -15,6 +15,7 @@ export class NavbarComponent {
   token: any;
   decodedToken: any;
   loggledUserRole: string = '';
+  role: string = '';
 
   constructor(private router: Router){}
 
@@ -23,6 +24,7 @@ export class NavbarComponent {
     if (this.token) {
       try {
         this.decodedToken = jwtDecode(this.token); // Koristite `default`
+        this.role = this.decodedToken['role'];
         console.log('Dekodiran token:', this.decodedToken['profileId']);
 
         const roles = this.decodedToken.user.roles.map((role: any) => role.name);
@@ -42,7 +44,12 @@ export class NavbarComponent {
   }
 
   home(){
-    this.router.navigate(["home"]);
+    if(this.role == 'ROLE_ADMIN'){
+      console.log("OVO JE ZA ADMINA");
+      this.router.navigate(["admin-homepage"]);
+    }else{
+      this.router.navigate(["home"]);
+    }
   }
   allUsers(){
     this.router.navigate(["all-users"]);

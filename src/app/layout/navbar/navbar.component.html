@@ -4,7 +4,7 @@
     <div class="button-container">
         <button (click)="home()">Home</button>
         <button *ngIf="getToken() !== null" (click)="trends()">Trends</button>
-        <button *ngIf="getToken() !== null" (click)="allUsers()">All Users</button>
+        <button *ngIf="getToken() !== null && role == 'ROLE_ADMIN'" (click)="allUsers()">All Users</button>
         <button *ngIf="getToken() !== null" (click)="messages()">Messages</button>
         <button *ngIf="getToken() !== null" (click)="map()">Map</button>
         <!-- <button *ngIf="getToken() !== null && loggledUserRole == 'ROLE_ADMIN'" (click)="allUsers()">All Users</button> -->
