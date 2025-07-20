@@ -51,6 +51,16 @@ export class PostsPreviewComponent implements OnChanges, OnInit {
     this.http.get<Post[]>(`http://localhost:8080/api/post`).subscribe({
       next: (response) =>{
         this.posts = response;
+        this.posts.forEach((post) => {
+        this.http.get<Profile>(`http://localhost:8080/api/profile?id=${post.creatorProfileId}`).subscribe({
+          next: (res) => {
+            post.creatorName = res.user?.name || "Unknown";
+            post.creatorSurname = res.user?.surname || "Unknown";
+            console.log("POST", post);
+          },
+          error: (err) => console.error(`Error fetching user for post ${post.id}: `, err)
+        });
+      });
       }
     })
   }

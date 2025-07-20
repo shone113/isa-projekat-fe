@@ -10,7 +10,7 @@ import { LoginDetails } from '../models/login-details.model';
 import { takeUntil } from 'rxjs';
 import {jwtDecode} from 'jwt-decode';
 import { MapComponent } from '../../layout/map/map.component';
-
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
     }
   sendCodeAgain: boolean = false;
 
-  constructor(private router: Router, private service: UserService, private http: HttpClient){}
+  constructor(private router: Router, private service: UserService, private http: HttpClient, private authService: AuthService){}
 
   ngOnInit(): void {
 
@@ -141,6 +141,7 @@ export class LoginComponent implements OnInit {
         }else{
           this.router.navigate(["home"])
         }
+        this.authService.login(userRole)
       },
       error: (err: HttpErrorResponse) =>{
         if(err.status == 404)
