@@ -36,33 +36,41 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     var id = this.route.snapshot.paramMap.get('id');
     const token = localStorage.getItem('jwt') || '';
-    this.decodedToken = jwtDecode(token); // Koristite `default`
-    console.log('Dekodiran token:', this.decodedToken['userId']);
-    this.showEditButton = Number(id) === Number(this.decodedToken['profileId']);
-    const headers = new HttpHeaders({
-            'Authorization': token ? `Bearer ${token}` : ''
-          });
-    this.http.get<Profile>(`http://localhost:8080/api/profile?id=${id}`, {headers}).subscribe({
+    if(token != ''){
+      this.decodedToken = jwtDecode(token); // Koristite `default`
+      this.showEditButton = Number(id) === Number(this.decodedToken['profileId']);
+    }
+    // const headers = new HttpHeaders({
+    //         'Authorization': token ? `Bearer ${token}` : ''
+    //       });
+    this.http.get<Profile>(`http://localhost:8080/api/profile?id=${id}`).subscribe({
       next: (res :Profile) => {
         this.profile = res;
-        console.log("Profil pri ucitavanju ", res);
         if(this.profile.user?.id == this.decodedToken['userId']){
           this.loggedUserProfile = true;
         }
-        console.log("TOKEN", this.profile.user?.id);
 
         this.http.get<Profile[]>(`http://localhost:8080/api/profile/follower?id=${this.profile.id}`).subscribe({
           next: (res: Profile[]) => {
             //this.followers = res;
             const profiles = res;
+            this.profile.user!.followersCount = res.length || 0;
             profiles.forEach(profile => {
               if (profile.id == this.decodedToken['profileId']) {
                 this.followedByLoggedUser = true;
               }
-              this.profile.user!.followersCount = res.length;
             });
 
-            console.log('followedByLoggedUser  *J*J*J*J*J', this.followedByLoggedUser);
+          }
+        })
+
+        this.http.get<Profile[]>(`http://localhost:8080/api/profile/following?id=${this.profile.id}`).subscribe({
+          next: (res: Profile[]) => {
+            //this.followers = res;
+            const profiles = res;
+            this.profile.user!.followingCount = res.length || 0;
+        
+
           }
         })
       }
@@ -80,10 +88,8 @@ export class ProfileComponent implements OnInit {
         this.profile.followers = followerIds;
         if(this.profile.user){
           this.profile.user.followersCount = response.length;
-          console.log("Duzinaaaa followera: ", response.length);
         }
         this.followedByLoggedUser = true;
-        console.log("**************** Profile **************", response);
       }
     })
   }
@@ -99,10 +105,8 @@ export class ProfileComponent implements OnInit {
         this.profile.followers = followerIds;
         if(this.profile.user){
           this.profile.user.followersCount = response.length;
-          console.log("Duzinaaaa followera: ", response.length);
         }
         this.followedByLoggedUser = false;
-        console.log("**************** Profile **************", response);
       }
     })
   }

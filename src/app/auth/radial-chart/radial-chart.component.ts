@@ -154,7 +154,7 @@ export class RadialChartComponent {
         labels: labeldata,
         datasets: [
           {
-            label: 'Broj objava',
+            label: 'percentage',
             data: valuedata,
             borderColor: '#007bff',
             //backgroundColor: 'rgba(0, 123, 255, 0.2)',

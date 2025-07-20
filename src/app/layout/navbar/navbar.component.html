@@ -5,10 +5,10 @@
         <button (click)="home()">Home</button>
         <button *ngIf="getToken() !== null" (click)="trends()">Trends</button>
         <button *ngIf="getToken() !== null && role == 'ROLE_ADMIN'" (click)="allUsers()">All Users</button>
-        <button *ngIf="getToken() !== null" (click)="messages()">Messages</button>
-        <button *ngIf="getToken() !== null" (click)="map()">Map</button>
+        <button *ngIf="getToken() !== null && role != 'ROLE_ADMIN'" (click)="messages()">Messages</button>
+        <button *ngIf="getToken() !== null && role != 'ROLE_ADMIN'" (click)="map()">Map</button>
         <!-- <button *ngIf="getToken() !== null && loggledUserRole == 'ROLE_ADMIN'" (click)="allUsers()">All Users</button> -->
-        <button *ngIf="getToken() !== null" (click)="profile()">Profile</button>
+        <button *ngIf="getToken() !== null && role != 'ROLE_ADMIN'" (click)="profile()">Profile</button>
         <button *ngIf="getToken() === null" (click)="login()">Login</button>
         <button *ngIf="getToken() !== null" (click)="logout()">Logout</button>
     </div>

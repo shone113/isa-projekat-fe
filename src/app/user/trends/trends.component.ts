@@ -4,6 +4,7 @@ import { Post } from '../../post/models/single-post.model';
 import { CommonModule } from '@angular/common';
 import { SinglePostComponent } from '../../post/single-post/single-post.component';
 import { User } from '../models/user.model';
+import { Profile } from '../models/profile.model';
 
 @Component({
   selector: 'app-trends',
@@ -46,6 +47,16 @@ export class TrendsComponent implements OnInit {
     this.http.get<Post[]>("http://localhost:8080/api/post/most-popular-posts", { headers }).subscribe({
       next: (res: Post[]) => {
         this.posts = res;
+        this.posts.forEach((post) => {
+                this.http.get<Profile>(`http://localhost:8080/api/profile?id=${post.creatorProfileId}`).subscribe({
+                  next: (res) => {
+                    post.creatorName = res.user?.name || "Unknown";
+                    post.creatorSurname = res.user?.surname || "Unknown";
+                    console.log("POST", post);
+                  },
+                  error: (err) => console.error(`Error fetching user for post ${post.id}: `, err)
+                });
+              });
       }
     })
   }

@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,16 +11,19 @@ import { jwtDecode } from 'jwt-decode';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit, OnChanges{
 
   token: any;
   decodedToken: any;
   loggledUserRole: string = '';
   role: string = '';
 
-  constructor(private router: Router){}
+  constructor(private router: Router, private authService: AuthService){}
 
   ngOnInit(): void {
+    this.authService.role$.subscribe((role) => {
+      this.role = role!;
+    });
     this.token = localStorage.getItem("jwt") ? localStorage.getItem("jwt") : '';
     if (this.token) {
       try {
@@ -35,7 +39,31 @@ export class NavbarComponent {
         } else {
           this.loggledUserRole = 'NO_ROLE';
         }
+        this.home()
+        console.log('ULOGA -> ', this.loggledUserRole);
+      } catch (error) {
+        console.error('Greška prilikom dekodiranja tokena:', error);
+      }
+    }
+  }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    this.token = localStorage.getItem("jwt") ? localStorage.getItem("jwt") : '';
+    if (this.token) {
+      try {
+        this.decodedToken = jwtDecode(this.token); // Koristite `default`
+        this.role = this.decodedToken['role'];
+        console.log('Dekodiran token:', this.decodedToken['profileId']);
+
+        const roles = this.decodedToken.user.roles.map((role: any) => role.name);
+        if (roles.includes('ROLE_ADMIN')) {
+          this.loggledUserRole = 'ROLE_ADMIN';
+        } else if (roles.length > 0) {
+          this.loggledUserRole = roles[0];
+        } else {
+          this.loggledUserRole = 'NO_ROLE';
+        }
+        this.home()
         console.log('ULOGA -> ', this.loggledUserRole);
       } catch (error) {
         console.error('Greška prilikom dekodiranja tokena:', error);
@@ -61,6 +89,13 @@ export class NavbarComponent {
     this.router.navigate(["messages"]);
   }
   profile(){
+    this.token = localStorage.getItem("jwt") ? localStorage.getItem("jwt") : '';
+    if (this.token) {
+      try {
+        this.decodedToken = jwtDecode(this.token);
+      } catch (error) {
+      }
+    }
     this.router.navigate(["profile", Number(this.decodedToken['profileId'])]);
   }
 
@@ -79,5 +114,6 @@ export class NavbarComponent {
     localStorage.removeItem("jwt");
     localStorage.clear();
     this.router.navigate(["login"]);
+    this.authService.logout();
   }
 }
