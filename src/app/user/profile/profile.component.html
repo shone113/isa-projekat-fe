@@ -12,7 +12,6 @@
               <span class="profile-text">{{profile.user?.name}} {{profile.user?.surname}}</span>
               <button *ngIf="!loggedUserProfile && !followedByLoggedUser" (click)="followUser()">Follow</button>
               <button *ngIf="!loggedUserProfile && followedByLoggedUser" (click)="unfollowUser()">Unfollow</button>
-              <button *ngIf="!loggedUserProfile">Message</button>
             </div>
             <div class="profile-infos">
                 <div class="profile-info">
@@ -57,7 +56,6 @@
                 <div class="follower_list" *ngFor="let profile of followers">
                     <img src="https://www.vijesti.me/data/images/2021/07/08/11/5346463_1424218_ls.jpg" alt="Slika">
                     <h2 (click)="navigateToProfile(profile.id)">{{profile.user?.email}}</h2>
-                    <button>Unfollow</button>
                 </div>
             </div>
             <h2 *ngIf="followers.length === 0">This section is empty</h2>
