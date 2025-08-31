@@ -1,7 +1,7 @@
 import { User } from "../../user/models/user.model";
 
 export class Post {
-  id: number;
+  id: number | null;
   image: string;
   description: string;
   likesCount: number;

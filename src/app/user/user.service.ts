@@ -8,9 +8,14 @@ import { Observable } from 'rxjs';
 })
 export class UserService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   registerUser(user: User): Observable<User>{
     return new Observable<User>(); //this.http.post<User>("http://localhost:8080/api/user", user);
+  }
+
+  getImage(filename: string): Observable<Blob>{
+    const url = `http://localhost:8080/images/${filename}`;
+    return this.http.get(url, { responseType: 'blob' });
   }
 }

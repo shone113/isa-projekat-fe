@@ -8,7 +8,7 @@
         </div>
         <div  *ngIf="token !== '' && decodedToken['profileId'] == post.creatorProfileId" class="author-actions">
           <i  class="fas fa-edit edit-icon" (click)="editPost()"></i>
-          <i class="fas fa-trash delete-icon" (click)="deletePost(post.id)"></i>
+          <i class="fas fa-trash delete-icon" (click)="deletePost(post.id!)"></i>
         </div>
       </div>
       <div class="post-date">
@@ -17,7 +17,7 @@
     </div>
 
     <div class="post-image">
-      <img [src]="'../../../assets/images/' + post.image" alt="Post Image">
+      <img [src]="'http://localhost:8080/images/' + post.image" alt="Post Image">
     </div>
 
     <div class="post-description">
@@ -43,10 +43,10 @@
         </div>
       </div>
     </div>
-    <app-comment-form class="comment-form"  (reloadComments)="onReloadComments()" [postId]="post.id"></app-comment-form>
+    <app-comment-form class="comment-form" *ngIf="post.id"  (reloadComments)="onReloadComments()" [postId]="post.id"></app-comment-form>
   </div>
 
   <div *ngIf="showEditForm" class="comments-section-container">
-     <app-update-post-form *ngIf="post" [postId]="post.id" [post]="post" (postUpdated)="onPostUpdated()" (toggleUpdateMenu)="onToggleUpdateMenu()"></app-update-post-form>
+     <app-update-post-form *ngIf="post"  [postId]="post.id!" [post]="post" (postUpdated)="onPostUpdated()" (toggleUpdateMenu)="onToggleUpdateMenu()"></app-update-post-form>
     </div>
 </div>

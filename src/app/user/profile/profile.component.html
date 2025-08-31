@@ -30,12 +30,18 @@
                 </div>
             </div>
         </div>
-        <mat-icon *ngIf="showEditButton" (click)="editProfile()" fontIcon="edit"></mat-icon>
+        <div class="addedit">
+            <mat-icon *ngIf="showAddButton" (click)="addPost()" fontIcon="add"></mat-icon>
+            <mat-icon *ngIf="showEditButton" (click)="editProfile()" fontIcon="edit"></mat-icon>
+        </div>
     </div>
 
    <div class="posts">
-        <img *ngFor="let post of profile.posts" [src]="'../../../assets/images/' + post.image" alt="Post Image" (click)="openModal(post)">
-   </div>
+    <img *ngFor="let post of profile.posts" 
+         [src]="'http://localhost:8080/images/' + post.image" 
+         alt="Post Image" 
+         (click)="openModal(post)">
+</div>
 
    <div class="modal" *ngIf="selectedPost" (click)="closeModal()">
         <div class="modal-content" (click)="$event.stopPropagation()">
@@ -65,5 +71,11 @@
     <div class="edit-modal-content" (click)="$event.stopPropagation()">
         <span class="close" (click)="closeEditProfile()">&times;</span>
         <app-edit-profile [user]="profile.user" (editedUser)="profileEdited($event)"></app-edit-profile>
+    </div>
+</div>
+<div class="edit-modal" [hidden]="!shouldAdd" (click)="closeAddPost()">
+    <div class="edit-modal-content" (click)="$event.stopPropagation()">
+        <span class="close" (click)="closeAddPost()">&times;</span>
+        <app-add-post [user]="profile.user"></app-add-post>
     </div>
 </div>

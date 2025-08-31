@@ -68,6 +68,13 @@
   object-fit: cover;
 }
 
+.addedit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+}
+
 
 .modal {
   display: flex;
@@ -158,9 +165,6 @@
 }
 
 mat-icon {
-  position: absolute;
-  top: 20px;
-  right: 30px;
   font-size: 24px;
   color: #333;
   cursor: pointer;

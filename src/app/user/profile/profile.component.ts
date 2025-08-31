@@ -10,11 +10,12 @@ import { jwtDecode } from 'jwt-decode';
 import { Post } from '../../post/models/single-post.model';
 import { EditProfileComponent } from '../edit-profile/edit-profile.component';
 import { User } from '../models/user.model';
+import { AddPostComponent } from "../../post/add-post/add-post.component";
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, SinglePostComponent, MatIconModule, RouterModule, EditProfileComponent],
+  imports: [CommonModule, SinglePostComponent, MatIconModule, RouterModule, EditProfileComponent, AddPostComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -30,7 +31,9 @@ export class ProfileComponent implements OnInit {
   loggedUserProfile: boolean = false;
   followedByLoggedUser: boolean = false;
   shouldEdit: boolean = false;
+  shouldAdd: boolean = false;
   showEditButton: boolean = false;
+  showAddButton: boolean = false;
   constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router, private cdr: ChangeDetectorRef){}
 
   ngOnInit(): void {
@@ -39,6 +42,7 @@ export class ProfileComponent implements OnInit {
     this.decodedToken = jwtDecode(token); // Koristite `default`
     console.log('Dekodiran token:', this.decodedToken['userId']);
     this.showEditButton = Number(id) === Number(this.decodedToken['profileId']);
+    this.showAddButton = Number(id) === Number(this.decodedToken['profileId']);
     const headers = new HttpHeaders({
             'Authorization': token ? `Bearer ${token}` : ''
           });
@@ -150,6 +154,11 @@ export class ProfileComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
+  addPost(){
+    this.shouldAdd = true;
+    this.cdr.detectChanges();
+  }
+
   profileEdited(event: User){
     this.profile.user = event;
     this.profile.user.followersCount = event.followersCount;
@@ -161,4 +170,10 @@ export class ProfileComponent implements OnInit {
     this.shouldEdit = false;
     this.cdr.detectChanges();
   }
+
+  closeAddPost(){
+    this.shouldAdd = false;
+    this.cdr.detectChanges();
+  }
+  
 }
